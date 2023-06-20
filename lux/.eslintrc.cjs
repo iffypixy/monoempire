@@ -1,19 +1,20 @@
 module.exports = {
-    env: {
-        browser: true,
-        es2020: true,
-    },
+    plugins: ["react-refresh"],
     extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/recommended",
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
     },
-    plugins: ["react-refresh"],
+    env: {
+        browser: true,
+        node: true,
+    },
     rules: {
         "react-refresh/only-export-components": "warn",
     },
