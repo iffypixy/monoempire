@@ -1,7 +1,9 @@
 {
     "name": "ekittens",
     "version": "0.1.0",
-    "scripts": {},
+    "scripts": {
+        "lint": "pnpm exec lint-staged"
+    },
     "author": "Ansat Euler <iffypixy@gmail.com>",
     "license": "ISC",
     "devDependencies": {
