@@ -1,5 +1,4 @@
 module.exports = {
-    plugins: ["react-refresh"],
     extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -16,7 +15,6 @@ module.exports = {
         node: true,
     },
     rules: {
-        "react-refresh/only-export-components": "warn",
         "@typescript-eslint/no-non-null-assertion": "off",
     },
 };
