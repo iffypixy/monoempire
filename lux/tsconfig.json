@@ -25,7 +25,7 @@
             "@widgets/*": ["./src/widgets", "./src/widgets/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "types"],
     "references": [
         {
             "path": "./tsconfig.vite.json"
