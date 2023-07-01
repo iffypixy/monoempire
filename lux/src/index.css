@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 400;
+    src: local("Unbounded"),
+        url("./shared/assets/fonts/Unbounded-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 500;
+    src: local("Unbounded"),
+        url("./shared/assets/fonts/Unbounded-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 600;
+    src: local("Unbounded"),
+        url("./shared/assets/fonts/Unbounded-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 700;
+    src: local("Unbounded"),
+        url("./shared/assets/fonts/Unbounded-Bold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 900;
+    src: local("Unbounded"),
+        url("./shared/assets/fonts/Unbounded-ExtraBold.woff2") format("woff2");
+}
+
+[data-theme="dark"] {
+    --primary-color: #ffc069;
+    --secondary-color: #69a8ff;
+    --accent-color: #b74f6f;
+    --primary-color-contrast: #000000;
+    --secondary-color-contrast: #000000;
+    --accent-color-contrast: #ffffff;
+    --paper-primary: #000000;
+    --paper-secondary: #0d0d0d;
+    --paper-contrast: #ffffff;
+    --home-bg: url("./shared/assets/topography/topography-dark.svg");
+}
+
+[data-theme="light"] {
+    --primary-color: #e6ad5f;
+    --secondary-color: #69a8ff;
+    --accent-color: #b74f6f;
+    --primary-color-contrast: #000000;
+    --secondary-color-contrast: #000000;
+    --accent-color-contrast: #ffffff;
+    --paper-primary: #ffffff;
+    --paper-secondary: #f2f2f2;
+    --paper-contrast: #000000;
+    --home-bg: url("./shared/assets/topography/topography-light.svg");
+}
+
+[data-theme="night"] {
+    --primary-color: #3abff8;
+    --secondary-color: #828df8;
+    --accent-color: #f471b5;
+    --primary-color-contrast: #000000;
+    --secondary-color-contrast: #000000;
+    --accent-color-contrast: #000000;
+    --paper-primary: #0f1729;
+    --paper-secondary: #192644;
+    --paper-contrast: #ffffff;
+    --home-bg: url("./shared/assets/topography/topography-night.svg");
+}
+
+[data-theme="dracula"] {
+    --primary-color: #ff7ac6;
+    --primary-color-contrast: #000000;
+    --secondary-color: #bf95f9;
+    --secondary-color-contrast: #000000;
+    --accent-color: #ffb86b;
+    --accent-color-contrast: #000000;
+    --paper-primary: #272935;
+    --paper-secondary: #353848;
+    --paper-contrast: #ffffff;
+    --home-bg: url("./shared/assets/topography/topography-dracula.svg");
+}
