@@ -17,4 +17,10 @@ module.exports = {
     rules: {
         "@typescript-eslint/no-non-null-assertion": "off",
     },
+    overrides: {
+        files: "*.cjs",
+        rules: {
+            "typescript-eslint/no-var-requires": "off",
+        },
+    },
 };
