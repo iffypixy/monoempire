@@ -6,6 +6,7 @@ import {store} from "@shared/lib/store";
 
 import {App} from "./app";
 
+import "@shared/lib/i18n";
 import "./index.css";
 
 const root = document.getElementById("root")!;
