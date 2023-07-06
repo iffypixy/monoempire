@@ -11,8 +11,8 @@ import {useSelector} from "react-redux";
 
 import {useDispatch} from "@shared/lib/store";
 
-import {themes, Theme} from "../lib/themes";
-import {selectors, actions} from "../model";
+import {themes, Theme} from "./themes";
+import {selectors, actions} from "./model";
 
 type Icon = React.ForwardRefExoticComponent<
     React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {

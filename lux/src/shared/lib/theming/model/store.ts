@@ -1,6 +1,6 @@
 import {createReducer, PayloadAction} from "@reduxjs/toolkit";
 
-import {restoreTheme, Theme} from "../lib/themes";
+import {restoreTheme, Theme} from "../themes";
 import * as a from "./actions";
 
 interface ThemingState {

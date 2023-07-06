@@ -3,5 +3,6 @@ export {
     actions as themingActions,
     selectors as themingSelectors,
 } from "./model";
-export {ThemeChangeListener} from "./lib";
-export {ThemeDropdown} from "./ui";
+export {ThemeChangeListener} from "./theme-change-listener";
+export {ThemeDropdown} from "./theme-dropdown";
+export * from "./themes";

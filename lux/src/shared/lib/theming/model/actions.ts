@@ -1,6 +1,6 @@
 import {PrepareAction, createAction} from "@reduxjs/toolkit";
 
-import {saveTheme, Theme} from "../lib/themes";
+import {saveTheme, Theme} from "../themes";
 
 const prefix = "theming";
 
