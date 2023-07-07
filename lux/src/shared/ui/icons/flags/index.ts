@@ -1,0 +1,9 @@
+export {ReactComponent as China} from "./china.svg";
+export {ReactComponent as France} from "./france.svg";
+export {ReactComponent as UK} from "./uk.svg";
+export {ReactComponent as Germany} from "./germany.svg";
+export {ReactComponent as Israel} from "./israel.svg";
+export {ReactComponent as Japan} from "./japan.svg";
+export {ReactComponent as Russia} from "./russia.svg";
+export {ReactComponent as UAE} from "./uae.svg";
+export {ReactComponent as Spain} from "./spain.svg";
