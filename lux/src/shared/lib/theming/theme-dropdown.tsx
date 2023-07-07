@@ -42,7 +42,7 @@ const context: Record<Theme, ThemeContext> = {
 
 const styles = {
     item: cva(
-        "grid grid-cols-[auto_auto_auto] gap-x-6 p-3 bg-paper-primary rounded-lg items-center border-2 hover:border-primary transition-colors",
+        "grid grid-cols-[auto_auto_auto] gap-x-6 p-3 bg-paper-primary rounded-lg items-center border-2 hover:border-accent transition-colors",
         {
             variants: {
                 isSelected: {
