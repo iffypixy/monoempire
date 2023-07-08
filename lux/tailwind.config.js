@@ -24,7 +24,7 @@ export default {
             animation: {
                 "slide-down-and-fade":
                     "slide-down-and-fade 1s cubic-bezier(0.16, 1, 0.3, 1)",
-                "text-shine": "text-shine 2s ease-in-out infinite alternate",
+                "text-shine": "text-shine 1s ease-in-out infinite alternate",
             },
             backgroundImage: {
                 home: "var(--home-bg)",
