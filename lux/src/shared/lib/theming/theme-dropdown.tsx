@@ -8,6 +8,7 @@ import {
 import {cva} from "class-variance-authority";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {useSelector} from "react-redux";
+import {useState} from "react";
 
 import {useDispatch} from "@shared/lib/store";
 
@@ -54,6 +55,19 @@ const styles = {
             },
         },
     ),
+    button: cva(
+        "w-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500",
+        {
+            variants: {
+                isActive: {
+                    true: "shadow-primary shadow-even-lg bg-primary text-primary-contrast",
+                },
+            },
+            defaultVariants: {
+                isActive: false,
+            },
+        },
+    ),
 };
 
 export const ThemeDropdown: React.FC = () => {
@@ -61,11 +75,19 @@ export const ThemeDropdown: React.FC = () => {
 
     const currentTheme = useSelector(selectors.theme);
 
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <DropdownMenu.Root modal={false}>
+        <DropdownMenu.Root
+            modal={false}
+            open={isOpen}
+            onOpenChange={(open) => {
+                setIsOpen(open);
+            }}
+        >
             <DropdownMenu.Trigger asChild className="outline-none">
                 <button>
-                    <SwatchIcon className="w-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500" />
+                    <SwatchIcon className={styles.button({isActive: isOpen})} />
                 </button>
             </DropdownMenu.Trigger>
 

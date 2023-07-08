@@ -2,6 +2,7 @@ import {useTranslation} from "react-i18next";
 import {LanguageIcon} from "@heroicons/react/24/outline";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {cva} from "class-variance-authority";
+import {useState} from "react";
 
 import {Flag} from "@shared/ui/icons";
 
@@ -56,7 +57,7 @@ const context: Record<
 
 const styles = {
     item: cva(
-        "flex p-3 bg-paper-primary rounded-lg items-center border-2 hover:border-accent transition-colors",
+        "flex p-3 bg-paper-primary rounded-lg items-center border-2 hover:border-accent transition-colors duration-300",
         {
             variants: {
                 isSelected: {
@@ -68,16 +69,39 @@ const styles = {
             },
         },
     ),
+    button: cva(
+        "w-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500",
+        {
+            variants: {
+                isActive: {
+                    true: "shadow-primary shadow-even-lg bg-primary text-primary-contrast",
+                },
+            },
+            defaultVariants: {
+                isActive: false,
+            },
+        },
+    ),
 };
 
 export const LanguageDropdown: React.FC = () => {
     const {i18n} = useTranslation();
 
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <DropdownMenu.Root modal={false}>
+        <DropdownMenu.Root
+            modal={false}
+            open={isOpen}
+            onOpenChange={(open) => {
+                setIsOpen(open);
+            }}
+        >
             <DropdownMenu.Trigger asChild className="outline-none">
                 <button>
-                    <LanguageIcon className="w-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500" />
+                    <LanguageIcon
+                        className={styles.button({isActive: isOpen})}
+                    />
                 </button>
             </DropdownMenu.Trigger>
 
