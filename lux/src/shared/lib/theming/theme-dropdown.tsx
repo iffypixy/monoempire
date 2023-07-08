@@ -42,7 +42,7 @@ const context: Record<Theme, ThemeContext> = {
 
 const styles = {
     item: cva(
-        "grid grid-cols-[auto_auto_auto] gap-x-6 p-3 bg-paper-primary rounded-lg items-center border-2 hover:border-accent transition-colors",
+        "border-2 rounded-lg outline-none overflow-hidden hover:border-accent transition-colors duration-300",
         {
             variants: {
                 isSelected: {
@@ -80,13 +80,14 @@ export const ThemeDropdown: React.FC = () => {
 
                     <div className="grid grid-cols-1 gap-y-4 bg-paper-secondary rounded-lg p-5">
                         {themes.map((theme) => {
-                            const Icon = context[theme].icon;
+                            const {icon: Icon} = context[theme];
 
                             return (
                                 <DropdownMenu.Item
                                     key={theme}
-                                    data-theme={theme}
-                                    className="outline-none"
+                                    className={styles.item({
+                                        isSelected: theme === currentTheme,
+                                    })}
                                     onSelect={(event) => {
                                         event.preventDefault();
                                     }}
@@ -96,10 +97,8 @@ export const ThemeDropdown: React.FC = () => {
                                 >
                                     <button className="w-full">
                                         <div
-                                            className={styles.item({
-                                                isSelected:
-                                                    theme === currentTheme,
-                                            })}
+                                            data-theme={theme}
+                                            className="grid grid-cols-[auto_auto_auto] gap-x-6 p-3 bg-paper-primary items-center"
                                         >
                                             <Icon className="w-5 text-primary" />
 
