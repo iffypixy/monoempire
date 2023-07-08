@@ -16,7 +16,7 @@ export const HomePage: React.FC = () => {
 
             <Center>
                 <div className="grid gap-y-32 grid-cols-1 w-full items-center">
-                    <H1 className="text-paper-contrast text-center font-extrabold">
+                    <H1 className="text-transparent text-center font-extrabold mx-auto bg-gradient-to-tr from-primary via-accent to-secondary from-0% via-50% to-100% bg-clip-text bg-[500%_auto] animate-text-shine">
                         e/kittens.
                     </H1>
 
