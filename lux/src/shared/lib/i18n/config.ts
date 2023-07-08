@@ -31,15 +31,13 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         fallbackLng: "en",
-        lng: "en",
         debug: import.meta.env.DEV,
         cleanCode: true,
         interpolation: {
             escapeValue: false,
         },
-        defaultNS: false,
         backend: {
-            loadPath: "/static/locales/{{ns}}/{{lng}}.json",
+            loadPath: "/locales/{{lng}}/{{ns}}.json",
         },
         ns: ["home", "common"],
 
