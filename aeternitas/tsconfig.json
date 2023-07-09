@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": ["ESNext"],
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "target": "ES2017",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "incremental": true,
+        "skipLibCheck": true,
+        "paths": {
+            "@config/*": ["./src/config", "./src/config/*"],
+            "@modules/*": ["./src/modules", "./src/modules/*"],
+            "@lib/*": ["./src/lib", "./src/lib/*"]
+        }
+    },
+    "include": ["./src"]
+}
