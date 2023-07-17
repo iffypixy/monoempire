@@ -1,3 +1,3 @@
-const env = process.env.NODE_ENV;
+const ENV = process.env.NODE_ENV;
 
-export const common = {env};
+export const common = {ENV};

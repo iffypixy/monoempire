@@ -1,3 +1,3 @@
-const secret = process.env.SESSION_SECRET;
+const SECRET = process.env.SESSION_SECRET;
 
-export const session = {secret};
+export const session = {SECRET};
