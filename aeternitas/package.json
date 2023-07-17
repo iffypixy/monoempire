@@ -3,10 +3,10 @@
     "private": true,
     "version": "0.0.0",
     "scripts": {
-        "build": "tsc",
+        "build": "cross-env NODE_ENV=production tsc",
         "typecheck": "tsc --watch --noEmit",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
-        "dev": "concurrently --raw --group \"tsx watch ./src/index.ts\" \"pnpm run typecheck\" \"pnpm run lint\""
+        "dev": "concurrently --raw --group \"cross-env NODE_ENV=development tsx watch ./src/index.ts\" \"pnpm run typecheck\" \"pnpm run lint\""
     },
     "dependencies": {
         "@prisma/client": "^4.16.2",
@@ -25,6 +25,7 @@
         "@typescript-eslint/eslint-plugin": "^5.61.0",
         "@typescript-eslint/parser": "^5.61.0",
         "concurrently": "^8.2.0",
+        "cross-env": "^7.0.3",
         "eslint": "^8.44.0",
         "prisma": "^4.16.2",
         "tsx": "^3.12.7",
