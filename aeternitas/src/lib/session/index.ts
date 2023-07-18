@@ -10,7 +10,7 @@ const store = new Store({client: redis});
 
 export const session = () =>
     s({
-        secret: config.session.secret,
+        secret: config.session.SECRET,
         resave: false,
         saveUninitialized: false,
         rolling: true,
