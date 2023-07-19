@@ -1,9 +1,13 @@
 import express from "express";
 
+import {auth} from "@modules/auth";
+import {session} from "@lib/session";
+
+import "@lib/config";
+
 export const app = express();
 
-app.get("/", (req, res) => {
-    const response = "Wie geht's? :) ??? :)";
+app.use(express.json());
+app.use(session());
 
-    res.send(response);
-});
+app.use(auth.route, auth.router);
