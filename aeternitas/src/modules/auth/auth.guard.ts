@@ -5,5 +5,5 @@ export const isAuthenticated: RequestHandler = (req, res, next) => {
 
     if (is) return next();
 
-    return res.status(403).json({message: "Not authenticated"});
+    return res.status(401).json({message: "Not authenticated"});
 };
