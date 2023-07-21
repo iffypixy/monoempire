@@ -1,15 +1,15 @@
 import {RequestHandler} from "express";
 import {AnyZodObject, ZodError} from "zod";
 
-interface ValidateOptions {
+interface ValidationSchema {
     body?: AnyZodObject;
     query?: AnyZodObject;
     params?: AnyZodObject;
 }
 
-export const validate = (options: ValidateOptions): RequestHandler => {
+export const validate = (schema: ValidationSchema): RequestHandler => {
     return async (req, res, next) => {
-        const {body, query, params} = options;
+        const {body, query, params} = schema;
 
         try {
             if (body) await body.parseAsync(req.body);
@@ -22,7 +22,9 @@ export const validate = (options: ValidateOptions): RequestHandler => {
 
             if (e instanceof ZodError) return res.json(e.issues);
 
-            res.json();
+            res.json("Unexpected error");
         }
     };
 };
+
+export const createSchema = (schema: ValidationSchema) => schema;
