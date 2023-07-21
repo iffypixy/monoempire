@@ -6,6 +6,10 @@
         "build": "cross-env NODE_ENV=production tsc",
         "typecheck": "tsc --watch --noEmit",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
+        "migrate:dev": "prisma migrate dev",
+        "migrate:reset": "prisma migrate reset",
+        "migrate:deploy": "primsa migrate deploy",
+        "studio": "prisma studio",
         "dev": "concurrently --raw --group \"cross-env NODE_ENV=development tsx watch ./src/index.ts\" \"pnpm run typecheck\" \"pnpm run lint\""
     },
     "dependencies": {
