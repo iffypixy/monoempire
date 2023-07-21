@@ -19,7 +19,7 @@ export const route = "/api/auth";
 
 router.get("/credentials", isAuthenticated, loadUser, async (req, res) => {
     res.json({
-        credentials: open.user(req.session.user),
+        credentials: open.credentials(req.session.user),
     });
 });
 
@@ -31,20 +31,14 @@ router.post("/login", validate(dtos.Login), async (req, res) => {
     if (username) user = await prisma.user.findFirst({where: {username}});
     else if (email) user = await prisma.user.findFirst({where: {email}});
 
-    if (!user)
-        return res.status(400).json({
-            message: "Invalid credentials",
-        });
+    if (!user) return res.status(400).json("Invalid credentials");
 
     const match = await bcrypt.compare(password, user.password);
 
-    if (!match)
-        return res.status(400).json({
-            message: "Invalid credentials",
-        });
+    if (!match) return res.status(400).json("Invalid credentials");
 
     res.status(200).json({
-        user: open.user(user),
+        credentials: open.credentials(user),
     });
 });
 
@@ -56,16 +50,11 @@ router.post("/register", validate(dtos.Register), async (req, res) => {
     });
 
     if (isUsernameTaken)
-        return res.status(400).json({
-            message: "The username is already taken",
-        });
+        return res.status(400).json("The username is already taken");
 
     const isEmailTaken = await prisma.user.findFirst({where: {email}});
 
-    if (isEmailTaken)
-        return res.status(400).json({
-            message: "The email is already taken",
-        });
+    if (isEmailTaken) return res.status(400).json("The email is already taken");
 
     const hash = await bcrypt.hash(password, 10);
 
@@ -79,7 +68,7 @@ router.post("/register", validate(dtos.Register), async (req, res) => {
     });
 
     res.status(201).json({
-        message: open.user(user),
+        credentials: open.credentials(user),
     });
 });
 
@@ -120,17 +109,14 @@ router.post(
 
         const email = req.session.registration.interim.google.email;
 
-        if (!email)
-            return res.status(400).json({
-                message: "No google email provided",
-            });
+        if (!email) return res.status(400).json("No google email provided");
 
         const user = await prisma.user.create({
             data: {email, username, avatar: avatars.random()},
         });
 
         res.status(201).json({
-            user: open.user(user),
+            credentials: open.credentials(user),
         });
     },
 );
