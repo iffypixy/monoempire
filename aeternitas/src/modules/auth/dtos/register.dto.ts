@@ -1,6 +1,8 @@
 import z from "zod";
 
-export const Register = {
+import {createSchema} from "@lib/validation";
+
+export const Register = createSchema({
     body: z.object({
         username: z
             .string()
@@ -10,6 +12,6 @@ export const Register = {
         email: z.string().email(),
         password: z.string().min(8).max(50),
     }),
-};
+});
 
 export type RegisterBody = z.infer<typeof Register.body>;
