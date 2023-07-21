@@ -1,4 +1,4 @@
-import {user, UserPublic} from "./user";
+import {user} from "./user";
+import {credentials} from "./credentials";
 
-export const open = {user};
-export type {UserPublic};
+export const open = {user, credentials};
