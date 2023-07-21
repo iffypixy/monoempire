@@ -12,8 +12,17 @@ model User {
   username String @unique @db.VarChar(32)
   email String @unique @db.VarChar(64)
   avatar String @db.VarChar(512)
+  role UserRole @default(USER)
   password String? @db.VarChar(256)
   createdAt DateTime @default(now())
 
   @@index(username)
 }
+
+enum UserRole {
+  USER
+  ELDER
+  ADMIN
+}
+
+
