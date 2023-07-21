@@ -27,4 +27,5 @@ export const validate = (schema: ValidationSchema): RequestHandler => {
     };
 };
 
-export const createSchema = (schema: ValidationSchema) => schema;
+export const createSchema = <T extends ValidationSchema>(schema: T): T =>
+    schema;
