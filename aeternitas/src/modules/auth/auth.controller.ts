@@ -10,13 +10,14 @@ import {open} from "@lib/open";
 import {validate} from "@lib/validation";
 
 import {isAuthenticated} from "./auth.guard";
+import {loadUser} from "./auth.middleware";
 import * as dtos from "./dtos";
 
 export const router = Router();
 
 export const route = "/api/auth";
 
-router.get("/credentials", isAuthenticated, async (req, res) => {
+router.get("/credentials", isAuthenticated, loadUser, async (req, res) => {
     res.json({
         credentials: open.user(req.session.user),
     });
