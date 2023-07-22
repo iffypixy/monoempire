@@ -13,8 +13,11 @@ model User {
   email String @unique @db.VarChar(64)
   avatar String @db.VarChar(512)
   role UserRole @default(USER)
+  rating Int @db.Integer() @default(1000)
   password String? @db.VarChar(256)
   createdAt DateTime @default(now())
+
+  matchPlayers MatchPlayer[]
 
   @@index(username)
 }
@@ -25,4 +28,24 @@ enum UserRole {
   ADMIN
 }
 
+model Match {
+  id String @id @default(uuid())
+
+  players MatchPlayer[] @relation("MatchPlayers")
+
+  winner MatchPlayer @relation("MatchWinner", fields: [winnerId], references: [id])
+  winnerId String @unique
+}
+
+model MatchPlayer {
+  id String @id @default(uuid())
+  rating Int @db.Integer()
+
+  wonMatch Match? @relation("MatchWinner")
+
+  match Match @relation("MatchPlayers", fields: [matchId], references: [id])
+  matchId String
+  user User @relation(fields: [userId], references: [id])
+  userId String
+}
 
