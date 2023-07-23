@@ -9,7 +9,9 @@ module.exports = {
     env: {
         node: true,
     },
-    rules: {},
+    rules: {
+        "@typescript-eslint/no-explicit-any": "off",
+    },
     overrides: [
         {
             files: ".eslintrc.{js,cjs}",
