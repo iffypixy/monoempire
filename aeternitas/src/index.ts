@@ -1,5 +1,5 @@
-import {app} from "./main";
+import {server} from "./main";
 
-app.listen(8000, () => {
+server.listen(8000, () => {
     console.log("[server]: running");
 });
