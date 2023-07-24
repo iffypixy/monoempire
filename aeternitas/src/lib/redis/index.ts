@@ -1,8 +1,4 @@
-import Redis from "ioredis";
+import {client} from "./client";
+import {service} from "./service";
 
-import {config} from "@lib/config";
-
-export const redis = new Redis({
-    host: config.redis.HOST,
-    port: config.redis.PORT,
-});
+export const redis = {client, service};
