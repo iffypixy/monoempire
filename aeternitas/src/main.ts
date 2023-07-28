@@ -12,7 +12,7 @@ const app = express();
 export const server = http.createServer(app);
 
 ws.setup(server, {
-    gateways: [matches.gateway],
+    gateways: [matches.gateways.public, matches.gateways.core],
 });
 
 app.use(express.json());
