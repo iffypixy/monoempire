@@ -4,11 +4,11 @@ import {User} from "@prisma/client";
 
 import {oauth2} from "@lib/oauth2";
 import {prisma} from "@lib/prisma";
-import {avatars} from "@lib/avatars";
 import {config} from "@lib/config";
 import {open} from "@lib/open";
 import {validation} from "@lib/validation";
 
+import {avatars} from "./lib/avatars";
 import {isAuthenticated} from "./auth.guard";
 import {loadUser} from "./auth.middleware";
 import * as dtos from "./dtos";
