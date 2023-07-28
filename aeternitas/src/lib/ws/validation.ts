@@ -1,12 +1,11 @@
-import {AnyZodObject, z} from "zod";
+import {AnyZodObject, ZodError, z} from "zod";
 
 interface AcknowledgeOptions {
-    ok: boolean;
     msg?: string;
     payload?: any;
 }
 
-export type Acknowledge = (options: AcknowledgeOptions) => void;
+export type Acknowledge = (ok: boolean, options?: AcknowledgeOptions) => void;
 
 export const validate = <T extends AnyZodObject>(
     schema: T,
@@ -20,7 +19,14 @@ export const validate = <T extends AnyZodObject>(
 
             listener(payload, acknowledge);
         } catch (e) {
-            acknowledge({ok: false});
+            if (e instanceof ZodError)
+                return acknowledge(false, {
+                    msg: "Validation error",
+                });
+
+            acknowledge(false, {
+                msg: "Unexpected error",
+            });
         }
     };
 };

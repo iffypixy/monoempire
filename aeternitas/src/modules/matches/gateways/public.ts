@@ -107,8 +107,8 @@ export const gateway = ws.createGateway((io) => {
                 );
 
                 if (isQueued)
-                    return acknowledge({
-                        ok: false,
+                    return acknowledge(false, {
+                        msg: "You are already enqueued",
                     });
 
                 queue.push({
@@ -116,7 +116,7 @@ export const gateway = ws.createGateway((io) => {
                     username: payload.username,
                 });
 
-                return acknowledge({ok: true});
+                return acknowledge(true);
             }),
         );
     });

@@ -21,16 +21,14 @@ export const gateway = ws.createGateway((io) => {
                     `${constants.redis.MATCH}:${payload.matchId}`,
                 );
 
-                if (!match)
-                    return acknowledge({ok: false, msg: "No match found"});
+                if (!match) return acknowledge(false, {msg: "No match found"});
 
                 const isPlayer = match.players.some(
                     (player) => player.id === socket.request.session.userId,
                 );
 
                 if (!isPlayer)
-                    return acknowledge({
-                        ok: false,
+                    return acknowledge(false, {
                         msg: "You are not a player of the match",
                     });
             }),
