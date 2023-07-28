@@ -1,2 +1,2 @@
-export * from "./redirect.dto";
-export * from "./register.dto";
+export * from "./redirect";
+export * from "./register";

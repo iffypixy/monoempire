@@ -15,7 +15,7 @@ router.get("/@/:username", validation.check(dtos.GetUser), async (req, res) => {
 
     const user = await prisma.user.findUnique({where: {username}});
 
-    return {
+    res.json({
         user: open.user(user),
-    };
+    });
 });

@@ -1,3 +1,3 @@
-import {router, route} from "./user.controller";
+import {router, route} from "./controller";
 
 export const users = {router, route};

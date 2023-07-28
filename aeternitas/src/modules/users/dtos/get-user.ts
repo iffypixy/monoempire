@@ -1,8 +1,8 @@
 import z from "zod";
 
-import {createSchema} from "@lib/validation";
+import {validation} from "@lib/validation";
 
-export const GetUser = createSchema({
+export const GetUser = validation.create({
     params: z.object({
         username: z.string().nonempty(),
     }),

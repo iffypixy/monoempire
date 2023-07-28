@@ -9,8 +9,8 @@ import {open} from "@lib/open";
 import {validation} from "@lib/validation";
 
 import {avatars} from "./lib/avatars";
-import {isAuthenticated} from "./auth.guard";
-import {loadUser} from "./auth.middleware";
+import {isAuthenticated} from "./guard";
+import {loadUser} from "./middleware";
 import * as dtos from "./dtos";
 
 export const router = Router();
