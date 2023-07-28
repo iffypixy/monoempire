@@ -7,8 +7,9 @@ interface ValidationSchema {
     params?: AnyZodObject;
 }
 
-export const validate = (schema: ValidationSchema): RequestHandler => {
-    return async (req, res, next) => {
+const check =
+    (schema: ValidationSchema): RequestHandler =>
+    async (req, res, next) => {
         const {body, query, params} = schema;
 
         try {
@@ -25,7 +26,7 @@ export const validate = (schema: ValidationSchema): RequestHandler => {
             res.json("Unexpected error");
         }
     };
-};
 
-export const createSchema = <T extends ValidationSchema>(schema: T): T =>
-    schema;
+const create = <T extends ValidationSchema>(schema: T): T => schema;
+
+export const validation = {check, create};

@@ -7,7 +7,7 @@ import {prisma} from "@lib/prisma";
 import {avatars} from "@lib/avatars";
 import {config} from "@lib/config";
 import {open} from "@lib/open";
-import {validate} from "@lib/validation";
+import {validation} from "@lib/validation";
 
 import {isAuthenticated} from "./auth.guard";
 import {loadUser} from "./auth.middleware";
@@ -23,7 +23,7 @@ router.get("/credentials", isAuthenticated, loadUser, async (req, res) => {
     });
 });
 
-router.post("/login", validate(dtos.Login), async (req, res) => {
+router.post("/login", validation.check(dtos.Login), async (req, res) => {
     const {email, username, password} = req.body as dtos.LoginBody;
 
     let user: User;
@@ -42,7 +42,7 @@ router.post("/login", validate(dtos.Login), async (req, res) => {
     });
 });
 
-router.post("/register", validate(dtos.Register), async (req, res) => {
+router.post("/register", validation.check(dtos.Register), async (req, res) => {
     const {username, email, password} = req.body as dtos.RegisterBody;
 
     const isUsernameTaken = await prisma.user.findFirst({
@@ -78,7 +78,7 @@ router.get("/oauth2/google", (req, res) => {
 
 router.get(
     "/oauth2/google/redirect",
-    validate(dtos.GoogleRedirect),
+    validation.check(dtos.GoogleRedirect),
     async (req, res) => {
         const {code} = req.query as dtos.GoogleRedirectQuery;
 
@@ -103,7 +103,7 @@ router.get(
 
 router.post(
     "/oauth2/google/register",
-    validate(dtos.GoogleRegister),
+    validation.check(dtos.GoogleRegister),
     async (req, res) => {
         const {username} = req.body as dtos.GoogleRegisterBody;
 

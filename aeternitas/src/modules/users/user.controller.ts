@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-import {validate} from "@lib/validation";
+import {validation} from "@lib/validation";
 import {prisma} from "@lib/prisma";
 import {open} from "@lib/open";
 
@@ -10,7 +10,7 @@ export const router = Router();
 
 export const route = "/users";
 
-router.get("/@/:username", validate(dtos.GetUser), async (req, res) => {
+router.get("/@/:username", validation.check(dtos.GetUser), async (req, res) => {
     const {username} = req.params as dtos.GetUserParams;
 
     const user = await prisma.user.findUnique({where: {username}});

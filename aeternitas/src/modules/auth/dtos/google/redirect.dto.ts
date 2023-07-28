@@ -1,8 +1,8 @@
 import z from "zod";
 
-import {createSchema} from "@lib/validation";
+import {validation} from "@lib/validation";
 
-export const GoogleRedirect = createSchema({
+export const GoogleRedirect = validation.create({
     query: z.object({
         code: z.string().nonempty(),
     }),
