@@ -9,6 +9,7 @@ const events = ws.createEvents("match", {
     client: {},
     server: {
         PLAY_CARD: "play-card",
+        NOPE: "nope",
     },
 });
 
