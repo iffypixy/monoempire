@@ -10,6 +10,7 @@ const events = ws.createEvents("match", {
     server: {
         PLAY_CARD: "play-card",
         NOPE: "nope",
+        JOIN: "join",
     },
 });
 
