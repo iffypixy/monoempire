@@ -5,7 +5,7 @@ import * as dtos from "../dtos";
 import {constants} from "../constants";
 import {PublicMatch} from "../lib/match";
 
-const events = ws.createEvents("match", {
+const events = ws.events("match", {
     client: {},
     server: {
         PLAY_CARD: "play-card",
@@ -14,7 +14,7 @@ const events = ws.createEvents("match", {
     },
 });
 
-export const gateway = ws.createGateway((io) => {
+export const gateway = ws.gateway((io) => {
     io.on("connection", (socket) => {
         socket.on(
             events.server.PLAY_CARD,

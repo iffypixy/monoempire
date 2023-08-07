@@ -1,6 +1,6 @@
-import {createGateway, setup} from "./setup";
+import {gateway, setup} from "./setup";
 import {service} from "./service";
-import {createEvents} from "./events";
+import {events} from "./events";
 import {validate} from "./validation";
 
-export const ws = {service, createGateway, setup, validate, createEvents};
+export const ws = {service, gateway, setup, validate, events};

@@ -10,7 +10,7 @@ import {PublicMatch} from "../lib/match";
 
 const QUEUE_INTERVAL = 5000;
 
-const events = ws.createEvents("public-match", {
+const events = ws.events("public-match", {
     server: {
         JOIN_QUEUE: "join-queue",
     },
@@ -21,7 +21,7 @@ const events = ws.createEvents("public-match", {
     },
 });
 
-export const gateway = ws.createGateway((io) => {
+export const gateway = ws.gateway((io) => {
     const service = ws.service.init(io);
 
     setInterval(async () => {

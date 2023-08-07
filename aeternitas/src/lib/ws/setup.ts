@@ -23,4 +23,4 @@ export const setup = (server: HTTPServer, {gateways}: WsSetupOptions) => {
     gateways.forEach((init) => init(io));
 };
 
-export const createGateway = (gateway: WsGateway) => gateway;
+export const gateway = (g: WsGateway) => g;

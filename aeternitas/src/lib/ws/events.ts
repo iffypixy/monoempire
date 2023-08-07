@@ -3,10 +3,7 @@ interface WsEvents {
     client: Record<string, string>;
 }
 
-export const createEvents = <T extends WsEvents>(
-    prefix: string,
-    events: T,
-): T => {
+export const events = <T extends WsEvents>(prefix: string, events: T): T => {
     const modified = {
         server: {},
         client: {},
