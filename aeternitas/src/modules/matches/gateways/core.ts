@@ -18,22 +18,26 @@ export const gateway = ws.gateway((io) => {
     io.on("connection", (socket) => {
         socket.on(
             events.server.PLAY_CARD,
-            ws.validate(dtos.PlayCard, async (payload, acknowledge) => {
-                const match = await redis.service.get<PublicMatch>(
-                    `${constants.redis.MATCH}:${payload.matchId}`,
-                );
+            ws.handler<dtos.PlayCard>(
+                [ws.validate(dtos.PlayCard)],
+                async (payload, acknowledge) => {
+                    const match = await redis.service.get<PublicMatch>(
+                        `${constants.redis.MATCH}:${payload.matchId}`,
+                    );
 
-                if (!match) return acknowledge(false, {msg: "No match found"});
+                    if (!match)
+                        return acknowledge(false, {msg: "No match found"});
 
-                const isPlayer = match.players.some(
-                    (player) => player.id === socket.request.session.userId,
-                );
+                    const isPlayer = match.players.some(
+                        (player) => player.id === socket.request.session.userId,
+                    );
 
-                if (!isPlayer)
-                    return acknowledge(false, {
-                        msg: "You are not a player of the match",
-                    });
-            }),
+                    if (!isPlayer)
+                        return acknowledge(false, {
+                            msg: "You are not a player of the match",
+                        });
+                },
+            ),
         );
     });
 });

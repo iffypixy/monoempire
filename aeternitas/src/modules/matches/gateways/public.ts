@@ -96,28 +96,31 @@ export const gateway = ws.gateway((io) => {
     io.on("connection", async (socket) => {
         socket.on(
             events.server.JOIN_QUEUE,
-            ws.validate(dtos.JoinPublicQueue, async (payload, acknowledge) => {
-                const queue =
-                    (await redis.service.get<PublicQueue>(
-                        constants.redis.PUBLIC_QUEUE,
-                    )) || [];
+            ws.handler<dtos.JoinPublicQueue>(
+                [ws.validate(dtos.JoinPublicQueue)],
+                async (payload, acknowledge) => {
+                    const queue =
+                        (await redis.service.get<PublicQueue>(
+                            constants.redis.PUBLIC_QUEUE,
+                        )) || [];
 
-                const isQueued = queue.some(
-                    ({id}) => id === socket.request.session.id,
-                );
+                    const isQueued = queue.some(
+                        ({id}) => id === socket.request.session.id,
+                    );
 
-                if (isQueued)
-                    return acknowledge(false, {
-                        msg: "You are already enqueued",
+                    if (isQueued)
+                        return acknowledge(false, {
+                            msg: "You are already enqueued",
+                        });
+
+                    queue.push({
+                        id: socket.request.session.id,
+                        username: payload.username,
                     });
 
-                queue.push({
-                    id: socket.request.session.id,
-                    username: payload.username,
-                });
-
-                return acknowledge(true);
-            }),
+                    return acknowledge(true);
+                },
+            ),
         );
     });
 });

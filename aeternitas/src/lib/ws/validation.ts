@@ -1,4 +1,6 @@
-import {AnyZodObject, ZodError, z} from "zod";
+import {AnyZodObject, ZodError} from "zod";
+
+import {middleware} from "./setup";
 
 interface AcknowledgeOptions {
     msg?: string;
@@ -7,17 +9,13 @@ interface AcknowledgeOptions {
 
 export type Acknowledge = (ok: boolean, options?: AcknowledgeOptions) => void;
 
-export const validate = <T extends AnyZodObject>(
-    schema: T,
-    listener: (payload: z.infer<T>, ack: Acknowledge) => void,
-) => {
-    return (payload: T, acknowledge: Acknowledge) => {
-        if (typeof acknowledge !== "function") return;
+export const validate = <T extends AnyZodObject>(schema: T) =>
+    middleware((payload, acknowledge) => {
+        if (typeof acknowledge !== "function")
+            throw new Error("No acknowledge utility provided");
 
         try {
             schema.parseAsync(payload);
-
-            listener(payload, acknowledge);
         } catch (e) {
             if (e instanceof ZodError)
                 return acknowledge(false, {
@@ -28,5 +26,4 @@ export const validate = <T extends AnyZodObject>(
                 msg: "Unexpected error",
             });
         }
-    };
-};
+    });
