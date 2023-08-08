@@ -43,7 +43,7 @@ export const handler =
             await middleware(payload, acknowledge);
         }
 
-        cb(payload);
+        cb(payload, acknowledge);
     };
 
 interface WsEvents {
