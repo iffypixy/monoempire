@@ -1,6 +1,6 @@
 import {AnyZodObject, ZodError} from "zod";
 
-import {middleware} from "./setup";
+import {middleware} from "../setup";
 
 interface AcknowledgeOptions {
     msg?: string;

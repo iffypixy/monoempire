@@ -19,7 +19,7 @@ export const gateway = ws.gateway((io) => {
         socket.on(
             events.server.PLAY_CARD,
             ws.handler<dtos.PlayCard>(
-                [ws.validate(dtos.PlayCard)],
+                [ws.mws.validate(dtos.PlayCard)],
                 async (payload, acknowledge) => {
                     const match = await redis.service.get<PublicMatch>(
                         `${constants.redis.MATCH}:${payload.matchId}`,

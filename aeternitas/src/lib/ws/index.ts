@@ -1,5 +1,5 @@
 import {gateway, setup, events, handler} from "./setup";
 import {service} from "./service";
-import {validate} from "./validation";
+import {mws} from "./middlewares";
 
-export const ws = {service, gateway, setup, validate, events, handler};
+export const ws = {service, gateway, setup, mws, events, handler};

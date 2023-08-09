@@ -3,7 +3,7 @@ import {Server as WSServer} from "socket.io";
 
 import {config} from "@lib/config";
 import {session} from "@lib/session";
-import {Acknowledge} from "./validation";
+import {Acknowledge} from "./middlewares/validation";
 
 type WsGateway = (server: WSServer) => void;
 

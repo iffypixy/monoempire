@@ -97,7 +97,7 @@ export const gateway = ws.gateway((io) => {
         socket.on(
             events.server.JOIN_QUEUE,
             ws.handler<dtos.JoinPublicQueue>(
-                [ws.validate(dtos.JoinPublicQueue)],
+                [ws.mws.validate(dtos.JoinPublicQueue)],
                 async (payload, acknowledge) => {
                     const queue =
                         (await redis.service.get<PublicQueue>(
