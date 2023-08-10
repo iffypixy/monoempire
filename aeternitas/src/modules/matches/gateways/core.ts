@@ -11,6 +11,7 @@ const events = ws.events("match", {
         PLAY_CARD: "play-card",
         NOPE: "nope",
         JOIN: "join",
+        RESIGN: "resign",
     },
 });
 
