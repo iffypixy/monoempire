@@ -6,6 +6,7 @@ const key = (id: string) => `$timer:${id}`;
 
 interface StartOptions {
     id?: string;
+    repeat?: number;
 }
 
 const start = async (cb: () => void, delay: number, options?: StartOptions) => {
@@ -13,15 +14,23 @@ const start = async (cb: () => void, delay: number, options?: StartOptions) => {
 
     await redis.service.set(key(id), true);
 
-    setTimeout(async () => {
-        const isActive = await redis.service.get(key(id));
+    if (options.repeat) {
+        setInterval(async () => {
+            const isActive = await redis.service.get(key(id));
 
-        if (isActive) {
-            cb();
+            if (isActive) cb();
+        }, options.repeat);
+    } else {
+        setTimeout(async () => {
+            const isActive = await redis.service.get(key(id));
 
-            await redis.service.delete(key(id));
-        }
-    }, delay);
+            if (isActive) {
+                cb();
+
+                await redis.service.delete(key(id));
+            }
+        }, delay);
+    }
 
     return id;
 };
@@ -30,7 +39,7 @@ const revoke = async (id: string) => {
     await redis.service.delete(key(id));
 };
 
-type BuildOptions = Partial<{
+type ProcessOptions = Partial<{
     delay: number;
 }>;
 
@@ -39,10 +48,10 @@ type AddTimerOptions = Partial<{
     delay: number;
 }>;
 
-const build = <T>(
+const process = <T>(
     name: string,
     processor: (payload: T) => void,
-    options?: BuildOptions,
+    options?: ProcessOptions,
 ) => {
     const key = (id: string) => `${name}:${id}`;
 
@@ -53,15 +62,19 @@ const build = <T>(
             if (!isActive) return null;
 
             return {
-                revoke: () => revoke(id),
+                revoke: () => revoke(key(id)),
             };
         },
         add(payload: T, opts?: AddTimerOptions) {
+            const id = opts.id || nanoid();
             const delay = opts.delay || options.delay || 0;
 
-            return start(() => processor(payload), delay, {id: opts.id});
+            return start(() => processor(payload), delay, {id: key(id)});
+        },
+        revoke(id: string) {
+            revoke(key(id));
         },
     };
 };
 
-export const timers = {build, start, revoke};
+export const timers = {process, start, revoke};
