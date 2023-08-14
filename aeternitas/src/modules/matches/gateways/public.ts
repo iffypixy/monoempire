@@ -2,6 +2,7 @@ import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
 import {utils} from "@lib/utils";
 import {open} from "@lib/open";
+import {timers} from "@lib/timers";
 
 import {PublicQueue} from "../types";
 import {constants} from "../constants";
@@ -24,75 +25,85 @@ const events = ws.events("public-match", {
 export const gateway = ws.gateway((io) => {
     const service = ws.service.init(io);
 
-    setInterval(async () => {
-        const queue =
-            (await redis.service.get<PublicQueue>(
-                constants.redis.PUBLIC_QUEUE,
-            )) || [];
+    const processors = {
+        matchmaking: timers.process(
+            "matchmaking",
+            async () => {
+                const queue =
+                    (await redis.service.get<PublicQueue>(
+                        constants.redis.PUBLIC_QUEUE,
+                    )) || [];
 
-        const groups = utils.splitArray(queue, constants.MAX_PLAYERS);
+                const groups = utils.splitArray(queue, constants.MAX_PLAYERS);
 
-        const ready = groups.filter(
-            (group) => group.length >= constants.MIN_PLAYERS,
-        );
+                const ready = groups.filter(
+                    (group) => group.length >= constants.MIN_PLAYERS,
+                );
 
-        ready.forEach(async (group) => {
-            const match = PublicMatch.init(group);
+                ready.forEach(async (group) => {
+                    const match = PublicMatch.init(group);
 
-            await redis.service.set(match.id, match);
+                    await redis.service.set(match.id, match);
 
-            match.players.forEach((player) => {
-                const sockets = service.getSocketsByUserId(player.id);
-
-                sockets.forEach((socket) => {
-                    socket.join(match.id);
-
-                    socket.on("disconnect", () => {
+                    match.players.forEach((player) => {
                         const sockets = service.getSocketsByUserId(player.id);
 
-                        const isDisconnected = sockets.length === 0;
+                        sockets.forEach((socket) => {
+                            socket.join(match.id);
 
-                        if (isDisconnected) {
-                            io.to(match.id).emit(
-                                events.client.PLAYER_DISCONNECT,
-                                {playerId: player.id},
-                            );
-                        }
+                            socket.on("disconnect", () => {
+                                const sockets = service.getSocketsByUserId(
+                                    player.id,
+                                );
+
+                                const isDisconnected = sockets.length === 0;
+
+                                if (isDisconnected) {
+                                    io.to(match.id).emit(
+                                        events.client.PLAYER_DISCONNECT,
+                                        {playerId: player.id},
+                                    );
+                                }
+                            });
+
+                            socket.on("reconnect", () => {
+                                const sockets = service
+                                    .getSocketsByUserId(player.id)
+                                    .filter((s) => s.id !== socket.id);
+
+                                const isDisconnected = sockets.length === 0;
+
+                                if (isDisconnected) {
+                                    io.to(match.id).emit(
+                                        events.client.PLAYER_RECONNECT,
+                                        {
+                                            playerId: player.id,
+                                        },
+                                    );
+                                }
+                            });
+                        });
                     });
 
-                    socket.on("reconnect", () => {
-                        const sockets = service
-                            .getSocketsByUserId(player.id)
-                            .filter((s) => s.id !== socket.id);
-
-                        const isDisconnected = sockets.length === 0;
-
-                        if (isDisconnected) {
-                            io.to(match.id).emit(
-                                events.client.PLAYER_RECONNECT,
-                                {
-                                    playerId: player.id,
-                                },
-                            );
-                        }
+                    io.to(match.id).emit(events.client.START, {
+                        match: open.match.public(match),
                     });
                 });
-            });
 
-            io.to(match.id).emit(events.client.START, {
-                match: open.match.public(match),
-            });
-        });
+                const updated = groups
+                    .filter((group) => !(group.length >= constants.MIN_PLAYERS))
+                    .flat();
 
-        const updated = groups
-            .filter((group) => !(group.length >= constants.MIN_PLAYERS))
-            .flat();
+                await redis.service.set<PublicQueue>(
+                    constants.redis.PUBLIC_QUEUE,
+                    updated,
+                );
+            },
+            {delay: QUEUE_INTERVAL},
+        ),
+    };
 
-        await redis.service.set<PublicQueue>(
-            constants.redis.PUBLIC_QUEUE,
-            updated,
-        );
-    }, QUEUE_INTERVAL);
+    processors.matchmaking.add(null, {repeat: true});
 
     io.on("connection", async (socket) => {
         socket.on(
