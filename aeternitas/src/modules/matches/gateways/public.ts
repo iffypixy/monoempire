@@ -25,9 +25,10 @@ export const gateway = ws.gateway((io) => {
     const service = ws.service.init(io);
 
     setInterval(async () => {
-        const queue = await redis.service.get<PublicQueue>(
-            constants.redis.PUBLIC_QUEUE,
-        );
+        const queue =
+            (await redis.service.get<PublicQueue>(
+                constants.redis.PUBLIC_QUEUE,
+            )) || [];
 
         const groups = utils.splitArray(queue, constants.MAX_PLAYERS);
 
