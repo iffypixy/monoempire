@@ -1,5 +1,16 @@
+import {clusterize} from "@lib/clusterize";
+
+import {matches} from "@modules/matches";
+import {ws} from "@lib/ws";
+
 import {server} from "./main";
 
-server.listen(8000, () => {
-    console.log("[server]: running");
+clusterize(() => {
+    ws.setup(server, {
+        gateways: [matches.gateways.public, matches.gateways.core],
+    });
+
+    server.listen(8000, () => {
+        console.log(`[server ${process.pid}]: running`);
+    });
 });
