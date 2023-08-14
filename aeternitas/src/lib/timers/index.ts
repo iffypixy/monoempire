@@ -69,7 +69,15 @@ const revoke = async (id: string) => {
     await redis.service.delete(key(id));
 };
 
+const DEFAULT_DELAY = 1000;
+
 type ProcessOptions = Partial<{
+    delay: number;
+}>;
+
+type AddOptions = Partial<{
+    id: string;
+    repeat: boolean;
     delay: number;
 }>;
 
@@ -90,7 +98,7 @@ const process = <T>(
                 revoke: () => revoke(key(id)),
             };
         },
-        add(payload: T, opts: StartOptions) {
+        add(payload: T, opts: AddOptions) {
             const id =
                 opts.id ||
                 uuid(processor, {
@@ -98,7 +106,7 @@ const process = <T>(
                     ...payload,
                 });
 
-            const delay = opts.delay || options.delay;
+            const delay = opts.delay || options.delay || DEFAULT_DELAY;
 
             return start(() => processor(payload), {
                 id: key(id),
