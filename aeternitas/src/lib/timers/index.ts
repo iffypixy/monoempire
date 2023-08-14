@@ -1,45 +1,65 @@
-import {nanoid} from "nanoid";
+import crypto from "crypto";
 
 import {redis} from "@lib/redis";
 
-const key = (id: string) => `$timer:${id}`;
-
 interface StartOptions {
     id?: string;
-    repeat?: number;
+    repeat?: boolean;
+    delay: number;
 }
 
 type Timer = true | null;
+type Callback = (...args: any[]) => void;
 
-const start = async (cb: () => void, delay: number, options?: StartOptions) => {
-    const id = options.id || nanoid();
+const key = (id: string) => `$timer:${id}`;
 
-    await redis.service.set<Timer>(key(id), true);
+/*
+@note: uuid is designed for generating consistent id across multiple node.js instances
+*/
+const uuid = (cb: Callback, payload?: any) => {
+    const addon = payload ? JSON.stringify(payload) : "";
 
-    if (options.repeat) {
-        const repeat = async () => {
+    const hash = crypto
+        .createHash("sha256")
+        .update(cb.toString().concat(addon))
+        .digest("hex");
+
+    return hash.slice(0, 8);
+};
+
+const start = async (cb: Callback, options?: StartOptions) => {
+    const id = options.id || uuid(cb);
+
+    const result = await redis.client.set(key(id), JSON.stringify(true), "NX");
+
+    const isUnlocked = result === "OK";
+
+    if (isUnlocked) {
+        if (options.repeat) {
+            const repeat = async () => {
+                setTimeout(async () => {
+                    const isActive = await redis.service.get<Timer>(key(id));
+
+                    if (isActive) {
+                        cb();
+
+                        repeat();
+                    }
+                }, options.delay);
+            };
+
+            repeat();
+        } else {
             setTimeout(async () => {
                 const isActive = await redis.service.get<Timer>(key(id));
 
                 if (isActive) {
                     cb();
 
-                    repeat();
+                    await redis.service.delete(key(id));
                 }
-            }, delay);
-        };
-
-        repeat();
-    } else {
-        setTimeout(async () => {
-            const isActive = await redis.service.get<Timer>(key(id));
-
-            if (isActive) {
-                cb();
-
-                await redis.service.delete(key(id));
-            }
-        }, delay);
+            }, options.delay);
+        }
     }
 
     return id;
@@ -50,11 +70,6 @@ const revoke = async (id: string) => {
 };
 
 type ProcessOptions = Partial<{
-    delay: number;
-}>;
-
-type AddTimerOptions = Partial<{
-    id: string;
     delay: number;
 }>;
 
@@ -75,11 +90,21 @@ const process = <T>(
                 revoke: () => revoke(key(id)),
             };
         },
-        add(payload: T, opts?: AddTimerOptions) {
-            const id = opts.id || nanoid();
-            const delay = opts.delay || options.delay || 0;
+        add(payload: T, opts: StartOptions) {
+            const id =
+                opts.id ||
+                uuid(processor, {
+                    ...opts,
+                    ...payload,
+                });
 
-            return start(() => processor(payload), delay, {id: key(id)});
+            const delay = opts.delay || options.delay;
+
+            return start(() => processor(payload), {
+                id: key(id),
+                repeat: opts.repeat,
+                delay,
+            });
         },
         revoke(id: string) {
             revoke(key(id));
