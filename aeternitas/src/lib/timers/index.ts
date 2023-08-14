@@ -15,11 +15,19 @@ const start = async (cb: () => void, delay: number, options?: StartOptions) => {
     await redis.service.set(key(id), true);
 
     if (options.repeat) {
-        setInterval(async () => {
-            const isActive = await redis.service.get(key(id));
+        const repeat = async () => {
+            setTimeout(async () => {
+                const isActive = await redis.service.get(key(id));
 
-            if (isActive) cb();
-        }, options.repeat);
+                if (isActive) {
+                    cb();
+
+                    repeat();
+                }
+            }, delay);
+        };
+
+        repeat();
     } else {
         setTimeout(async () => {
             const isActive = await redis.service.get(key(id));
