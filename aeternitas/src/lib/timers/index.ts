@@ -9,15 +9,17 @@ interface StartOptions {
     repeat?: number;
 }
 
+type Timer = true | null;
+
 const start = async (cb: () => void, delay: number, options?: StartOptions) => {
     const id = options.id || nanoid();
 
-    await redis.service.set(key(id), true);
+    await redis.service.set<Timer>(key(id), true);
 
     if (options.repeat) {
         const repeat = async () => {
             setTimeout(async () => {
-                const isActive = await redis.service.get(key(id));
+                const isActive = await redis.service.get<Timer>(key(id));
 
                 if (isActive) {
                     cb();
@@ -30,7 +32,7 @@ const start = async (cb: () => void, delay: number, options?: StartOptions) => {
         repeat();
     } else {
         setTimeout(async () => {
-            const isActive = await redis.service.get(key(id));
+            const isActive = await redis.service.get<Timer>(key(id));
 
             if (isActive) {
                 cb();
