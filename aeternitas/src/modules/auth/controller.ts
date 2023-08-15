@@ -2,13 +2,13 @@ import {Router} from "express";
 import bcrypt from "bcrypt";
 import {User} from "@prisma/client";
 
+import {users} from "@modules/users";
 import {oauth2} from "@lib/oauth2";
 import {prisma} from "@lib/prisma";
 import {config} from "@lib/config";
-import {open} from "@lib/open";
+import {open} from "@lib/shared";
 import {validation} from "@lib/validation";
 
-import {avatars} from "./lib/avatars";
 import {isAuthenticated} from "./guard";
 import {loadUser} from "./middleware";
 import * as dtos from "./dtos";
@@ -63,7 +63,7 @@ router.post("/register", validation.check(dtos.Register), async (req, res) => {
             username,
             email,
             password: hash,
-            avatar: avatars.random(),
+            avatar: users.lib.avatars.random(),
         },
     });
 
@@ -112,7 +112,7 @@ router.post(
         if (!email) return res.status(400).json("No google email provided");
 
         const user = await prisma.user.create({
-            data: {email, username, avatar: avatars.random()},
+            data: {email, username, avatar: users.lib.avatars.random()},
         });
 
         res.status(201).json({

@@ -2,7 +2,7 @@ import {Router} from "express";
 
 import {validation} from "@lib/validation";
 import {prisma} from "@lib/prisma";
-import {open} from "@lib/open";
+import {open} from "@lib/shared";
 
 import * as dtos from "./dtos";
 
