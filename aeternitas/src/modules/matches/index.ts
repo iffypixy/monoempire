@@ -1,5 +1,5 @@
 import {gateways} from "./gateways";
-import {PublicMatch, PublicMatchPlayer} from "./types";
+import {IMatch} from "./lib/match";
 
 export const matches = {gateways};
-export type {PublicMatch, PublicMatchPlayer};
+export type {IMatch};
