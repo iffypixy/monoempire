@@ -7,11 +7,7 @@ import {Acknowledge} from "./middlewares/validation";
 
 type WsGateway = (server: WSServer) => void;
 
-interface WsSetupOptions {
-    gateways: WsGateway[];
-}
-
-export const setup = (server: HTTPServer, {gateways}: WsSetupOptions) => {
+export const setup = (server: HTTPServer, gateways: WsGateway[]) => {
     const io = new WSServer(server, {
         cors: {
             origin: config.client.ORIGIN,

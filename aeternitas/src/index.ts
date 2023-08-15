@@ -6,9 +6,7 @@ import {ws} from "@lib/ws";
 import {server} from "./main";
 
 clusterize(() => {
-    ws.setup(server, {
-        gateways: [matches.gateways.public, matches.gateways.core],
-    });
+    ws.setup(server, [matches.gateways.public, matches.gateways.core]);
 
     server.listen(8000, () => {
         console.log(`[server #${process.pid}]: running`);
