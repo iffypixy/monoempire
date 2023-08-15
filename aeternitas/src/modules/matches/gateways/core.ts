@@ -3,7 +3,7 @@ import {redis} from "@lib/redis";
 
 import * as dtos from "../dtos";
 import {constants} from "../constants";
-import {PublicMatch} from "../lib/match";
+import {IMatch} from "../lib/match";
 
 const events = ws.events("match", {
     client: {},
@@ -22,7 +22,7 @@ export const gateway = ws.gateway((io) => {
             ws.handler<dtos.PlayCard>(
                 [ws.mws.validate(dtos.PlayCard)],
                 async (payload, acknowledge) => {
-                    const match = await redis.service.get<PublicMatch>(
+                    const match = await redis.service.get<IMatch>(
                         `${constants.redis.MATCH}:${payload.matchId}`,
                     );
 

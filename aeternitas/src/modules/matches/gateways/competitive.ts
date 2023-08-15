@@ -1,30 +1,29 @@
 import Queue from "bull";
-import {Session} from "express-session";
+import {User} from "@prisma/client";
 
-import {auth} from "@modules/auth";
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
-import {utils} from "@lib/utils";
-import {open} from "@lib/shared";
 import {Callback} from "@lib/types";
+import {utils} from "@lib/utils";
+import {prisma} from "@lib/prisma";
+import {open} from "@lib/shared";
 
 import {constants} from "../constants";
-import * as dtos from "../dtos";
 import {Match} from "../lib/match";
 
-const events = ws.events("public-match", {
+const events = ws.events("competitive-match", {
     server: {
         JOIN_QUEUE: "join-queue",
     },
     client: {
         START: "start",
-        PLAYER_DISCONNECT: "player-disconnect",
         PLAYER_RECONNECT: "player-reconnect",
+        PLAYER_DISCONNECT: "player-disconnect",
     },
 });
 
 const queues = {
-    matchmaking: new Queue("public-matchmaking"),
+    matchmaking: new Queue("competitive-matchmaking"),
 };
 
 const startMatchmakingQueue = (cb: Callback) => {
@@ -37,18 +36,15 @@ const startMatchmakingQueue = (cb: Callback) => {
     });
 };
 
-export type PublicMatchmakingQueue = {
-    id: Session["id"];
-    username: string;
-}[];
+type CompetitiveMatchmakingQueue = User["id"][];
 
 export const gateway = ws.gateway((io) => {
     const service = ws.service.init(io);
 
     startMatchmakingQueue(async () => {
         const queue =
-            (await redis.service.get<PublicMatchmakingQueue>(
-                constants.redis.matchmaking.PUBLIC_QUEUE,
+            (await redis.service.get<CompetitiveMatchmakingQueue>(
+                constants.redis.matchmaking.COMPETITIVE_QUEUE,
             )) || [];
 
         const groups = utils.splitArray(queue, constants.MAX_PLAYERS);
@@ -58,13 +54,26 @@ export const gateway = ws.gateway((io) => {
         );
 
         ready.forEach(async (group) => {
-            const players = group.map((user) => ({
-                ...user,
-                avatar: auth.libs.avatars.random(),
-                user: null,
-            }));
+            const players = (
+                await Promise.all(
+                    group.map(async (id) => {
+                        const user = await prisma.user.findUnique({
+                            where: {id},
+                        });
 
-            const match = Match.init({type: "public", players});
+                        if (!user) return null;
+
+                        return {
+                            id,
+                            username: user.username,
+                            avatar: user.avatar,
+                            user,
+                        };
+                    }),
+                )
+            ).filter(Boolean);
+
+            const match = Match.init({type: "competitive", players});
 
             await redis.service.set(match.id, match);
 
@@ -115,40 +124,11 @@ export const gateway = ws.gateway((io) => {
             .filter((group) => !(group.length >= constants.MIN_PLAYERS))
             .flat();
 
-        await redis.service.set<PublicMatchmakingQueue>(
-            constants.redis.matchmaking.PUBLIC_QUEUE,
+        await redis.service.set<CompetitiveMatchmakingQueue>(
+            constants.redis.matchmaking.COMPETITIVE_QUEUE,
             updated,
         );
     });
 
-    io.on("connection", async (socket) => {
-        socket.on(
-            events.server.JOIN_QUEUE,
-            ws.handler<dtos.JoinPublicQueue>(
-                [ws.mws.validate(dtos.JoinPublicQueue)],
-                async (payload, acknowledge) => {
-                    const queue =
-                        (await redis.service.get<PublicMatchmakingQueue>(
-                            constants.redis.matchmaking.PUBLIC_QUEUE,
-                        )) || [];
-
-                    const isQueued = queue.some(
-                        ({id}) => id === socket.request.session.id,
-                    );
-
-                    if (isQueued)
-                        return acknowledge(false, {
-                            msg: "You are already enqueued",
-                        });
-
-                    queue.push({
-                        id: socket.request.session.id,
-                        username: payload.username,
-                    });
-
-                    return acknowledge(true);
-                },
-            ),
-        );
-    });
+    io.on("connection", (socket) => {});
 });
