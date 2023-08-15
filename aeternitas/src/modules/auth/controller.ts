@@ -6,7 +6,7 @@ import {users} from "@modules/users";
 import {oauth2} from "@lib/oauth2";
 import {prisma} from "@lib/prisma";
 import {config} from "@lib/config";
-import {open} from "@lib/shared";
+import {shared} from "@lib/shared";
 import {validation} from "@lib/validation";
 
 import {isAuthenticated} from "./guard";
@@ -19,7 +19,7 @@ export const route = "/api/auth";
 
 router.get("/credentials", isAuthenticated, loadUser, async (req, res) => {
     res.json({
-        credentials: open.credentials(req.session.user),
+        credentials: shared.credentials(req.session.user),
     });
 });
 
@@ -38,7 +38,7 @@ router.post("/login", validation.check(dtos.Login), async (req, res) => {
     if (!match) return res.status(400).json("Invalid credentials");
 
     res.status(200).json({
-        credentials: open.credentials(user),
+        credentials: shared.credentials(user),
     });
 });
 
@@ -68,7 +68,7 @@ router.post("/register", validation.check(dtos.Register), async (req, res) => {
     });
 
     res.status(201).json({
-        credentials: open.credentials(user),
+        credentials: shared.credentials(user),
     });
 });
 
@@ -116,7 +116,7 @@ router.post(
         });
 
         res.status(201).json({
-            credentials: open.credentials(user),
+            credentials: shared.credentials(user),
         });
     },
 );

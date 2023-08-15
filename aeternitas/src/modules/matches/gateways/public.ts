@@ -5,12 +5,13 @@ import {auth} from "@modules/auth";
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
 import {utils} from "@lib/utils";
-import {open} from "@lib/shared";
+import {shared} from "@lib/shared";
 import {Callback} from "@lib/types";
 
 import {constants} from "../constants";
 import * as dtos from "../dtos";
 import {Match} from "../lib/match";
+import {users} from "@modules/users";
 
 const events = ws.events("public-match", {
     server: {
@@ -60,7 +61,7 @@ export const gateway = ws.gateway((io) => {
         ready.forEach(async (group) => {
             const players = group.map((user) => ({
                 ...user,
-                avatar: auth.libs.avatars.random(),
+                avatar: users.lib.avatars.random(),
                 user: null,
             }));
 
@@ -107,7 +108,7 @@ export const gateway = ws.gateway((io) => {
             });
 
             io.to(match.id).emit(events.client.START, {
-                match: open.match(match),
+                match: shared.match(match),
             });
         });
 

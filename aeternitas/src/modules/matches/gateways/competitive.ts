@@ -6,7 +6,7 @@ import {redis} from "@lib/redis";
 import {Callback} from "@lib/types";
 import {utils} from "@lib/utils";
 import {prisma} from "@lib/prisma";
-import {open} from "@lib/shared";
+import {shared} from "@lib/shared";
 
 import {constants} from "../constants";
 import {Match} from "../lib/match";
@@ -116,7 +116,7 @@ export const gateway = ws.gateway((io) => {
             });
 
             io.to(match.id).emit(events.client.START, {
-                match: open.match(match),
+                match: shared.match(match),
             });
         });
 

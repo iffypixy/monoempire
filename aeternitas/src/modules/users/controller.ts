@@ -2,7 +2,7 @@ import {Router} from "express";
 
 import {validation} from "@lib/validation";
 import {prisma} from "@lib/prisma";
-import {open} from "@lib/shared";
+import {shared} from "@lib/shared";
 
 import * as dtos from "./dtos";
 
@@ -16,6 +16,6 @@ router.get("/@/:username", validation.check(dtos.GetUser), async (req, res) => {
     const user = await prisma.user.findUnique({where: {username}});
 
     res.json({
-        user: open.user(user),
+        user: shared.user(user),
     });
 });
