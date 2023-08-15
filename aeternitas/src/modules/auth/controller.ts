@@ -9,8 +9,8 @@ import {config} from "@lib/config";
 import {shared} from "@lib/shared";
 import {validation} from "@lib/validation";
 
-import {isAuthenticated} from "./guard";
-import {loadUser} from "./middleware";
+import {isAuthenticated} from "./guards";
+import {loadUser} from "./middlewares";
 import * as dtos from "./dtos";
 
 export const router = Router();
