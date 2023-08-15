@@ -1,7 +1,7 @@
 import Queue from "bull";
 import {Session} from "express-session";
 
-import {auth} from "@modules/auth";
+import {users} from "@modules/users";
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
 import {utils} from "@lib/utils";
@@ -11,7 +11,6 @@ import {Callback} from "@lib/types";
 import {constants} from "../constants";
 import * as dtos from "../dtos";
 import {Match} from "../lib/match";
-import {users} from "@modules/users";
 
 const events = ws.events("public-match", {
     server: {
