@@ -1,20 +1,82 @@
 import {nanoid} from "nanoid";
+import {User} from "@prisma/client";
 
-import {PublicMatch as PMatch, PublicQueue} from "../types";
+import {Nullable} from "@lib/types";
+
+import {Card} from "../types";
 import {pile} from "./pile";
 
 const ID_LENGTH = 13;
 
-export class PublicMatch implements PMatch {
-    id: PMatch["id"];
-    players: PMatch["players"];
-    spectators: PMatch["spectators"];
-    piles: PMatch["piles"];
-    turn: PMatch["turn"];
-    context: PMatch["context"];
-    state: PMatch["state"];
+export type MatchStateType = "waiting-for-action";
 
-    constructor(match: PMatch) {
+export interface IMatch {
+    id: string;
+    turn: number;
+    players: MatchPlayer[];
+    spectators: MatchSpectator[];
+    type: "competitive" | "public";
+
+    piles: {
+        draw: Card[];
+        discard: Card[];
+    };
+
+    context: {
+        isReversed: boolean;
+        isNoped: boolean;
+        attacks: number;
+    };
+
+    state: {
+        type: MatchStateType;
+        start: number;
+        payload?: any;
+    };
+}
+
+interface MatchPlayer {
+    id: string;
+    username: string;
+    avatar: string;
+    hasLost: boolean;
+    user: Nullable<User>;
+    hand: {
+        cards: Card[];
+        marked: string[];
+    };
+}
+
+interface MatchSpectator {
+    id: string;
+    username: string;
+    avatar: string;
+    user: Nullable<User>;
+}
+
+type MatchType = "competitive" | "public";
+
+interface MatchInitOptions {
+    type: MatchType;
+    players: {
+        id: string;
+        username: string;
+        avatar: string;
+        user: Nullable<User>;
+    }[];
+}
+
+export class Match {
+    id: IMatch["id"];
+    turn: IMatch["turn"];
+    type: IMatch["type"];
+    players: IMatch["players"];
+    spectators: IMatch["spectators"];
+    piles: IMatch["piles"];
+    context: IMatch["context"];
+    state: IMatch["state"];
+
+    constructor(match: IMatch) {
         this.id = match.id;
         this.players = match.players;
         this.spectators = match.spectators;
@@ -24,21 +86,22 @@ export class PublicMatch implements PMatch {
         this.state = match.state;
     }
 
-    static hydrate(match: PMatch) {
-        return new PublicMatch(match);
+    static hydrate(match: IMatch) {
+        return new Match(match);
     }
 
-    static init(players: PublicQueue) {
-        const {deck, hands} = pile.generate({players: players.length});
+    static init(options: MatchInitOptions) {
+        const {deck, hands} = pile.generate({players: options.players.length});
 
-        return new PublicMatch({
+        return new Match({
             id: nanoid(ID_LENGTH),
             turn: 0,
+            type: options.type,
             spectators: [],
             context: {
                 attacks: 0,
-                noped: false,
-                reversed: false,
+                isNoped: false,
+                isReversed: false,
             },
             state: {
                 type: "waiting-for-action",
@@ -48,17 +111,19 @@ export class PublicMatch implements PMatch {
                 draw: deck,
                 discard: [],
             },
-            players: players.map((user, idx) => ({
+            players: options.players.map((user, idx) => ({
                 ...user,
-                hand: hands[idx],
-                lost: false,
-                marked: [],
+                hasLost: false,
+                hand: {
+                    cards: hands[idx],
+                    marked: [],
+                },
             })),
         });
     }
 
     nextTurn() {
-        if (this.context.reversed) {
+        if (this.context.isReversed) {
             const previous = this.players[this.turn - 1];
 
             if (previous) this.turn--;
@@ -72,7 +137,7 @@ export class PublicMatch implements PMatch {
     }
 
     updateTurn() {
-        if (this.context.reversed) {
+        if (this.context.isReversed) {
             const previous = this.players[this.turn - 1];
 
             if (previous) this.turn--;
@@ -85,7 +150,7 @@ export class PublicMatch implements PMatch {
     }
 
     get nextPlayer() {
-        if (this.context.reversed) {
+        if (this.context.isReversed) {
             const previous = this.players[this.turn - 1];
 
             if (previous) return previous;
