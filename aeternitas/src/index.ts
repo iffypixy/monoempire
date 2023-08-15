@@ -11,6 +11,6 @@ clusterize(() => {
     });
 
     server.listen(8000, () => {
-        console.log(`[server ${process.pid}]: running`);
+        console.log(`[server #${process.pid}]: running`);
     });
 });
