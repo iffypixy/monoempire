@@ -1,9 +1,14 @@
 import {RequestHandler} from "express";
 
-export const isAuthenticated: RequestHandler = (req, res, next) => {
-    const is = !!req.session.userId;
+import {ws} from "@lib/ws";
 
-    if (is) return next();
+export const isAuthenticated = {
+    http: ((req, res, next) => {
+        const is = !!req.session.userId;
 
-    return res.status(401).json("Not authenticated");
+        if (is) return next();
+
+        return res.status(401).json("Not authenticated");
+    }) as RequestHandler,
+    ws: ws.guard((socket) => !!socket.request.session.userId),
 };

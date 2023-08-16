@@ -1,6 +1,7 @@
 import Queue from "bull";
 import {User} from "@prisma/client";
 
+import {auth} from "@modules/auth";
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
 import {Callback} from "@lib/types";
@@ -130,5 +131,9 @@ export const gateway = ws.gateway((io) => {
         );
     });
 
-    io.on("connection", (socket) => {});
+    io.on("connection", (socket) => {
+        const isPermitted = auth.guards.isAuthenticated.ws(socket);
+
+        if (!isPermitted) return;
+    });
 });

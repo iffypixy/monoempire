@@ -2,6 +2,7 @@ import Queue from "bull";
 import {Session} from "express-session";
 
 import {users} from "@modules/users";
+import {validation} from "@lib/validation";
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
 import {utils} from "@lib/utils";
@@ -125,7 +126,7 @@ export const gateway = ws.gateway((io) => {
         socket.on(
             events.server.JOIN_QUEUE,
             ws.handler<dtos.JoinPublicQueue>(
-                [ws.mws.validate(dtos.JoinPublicQueue)],
+                [validation.check.ws(dtos.JoinPublicQueue)],
                 async (payload, acknowledge) => {
                     const queue =
                         (await redis.service.get<PublicMatchmakingQueue>(

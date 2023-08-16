@@ -17,13 +17,13 @@ export const router = Router();
 
 export const route = "/api/auth";
 
-router.get("/credentials", isAuthenticated, loadUser, async (req, res) => {
+router.get("/credentials", isAuthenticated.http, loadUser, async (req, res) => {
     res.json({
         credentials: shared.credentials(req.session.user),
     });
 });
 
-router.post("/login", validation.check(dtos.Login), async (req, res) => {
+router.post("/login", validation.check.http(dtos.Login), async (req, res) => {
     const {email, username, password} = req.body as dtos.LoginBody;
 
     let user: User;
@@ -42,35 +42,40 @@ router.post("/login", validation.check(dtos.Login), async (req, res) => {
     });
 });
 
-router.post("/register", validation.check(dtos.Register), async (req, res) => {
-    const {username, email, password} = req.body as dtos.RegisterBody;
+router.post(
+    "/register",
+    validation.check.http(dtos.Register),
+    async (req, res) => {
+        const {username, email, password} = req.body as dtos.RegisterBody;
 
-    const isUsernameTaken = await prisma.user.findFirst({
-        where: {username},
-    });
+        const isUsernameTaken = await prisma.user.findFirst({
+            where: {username},
+        });
 
-    if (isUsernameTaken)
-        return res.status(400).json("The username is already taken");
+        if (isUsernameTaken)
+            return res.status(400).json("The username is already taken");
 
-    const isEmailTaken = await prisma.user.findFirst({where: {email}});
+        const isEmailTaken = await prisma.user.findFirst({where: {email}});
 
-    if (isEmailTaken) return res.status(400).json("The email is already taken");
+        if (isEmailTaken)
+            return res.status(400).json("The email is already taken");
 
-    const hash = await bcrypt.hash(password, 10);
+        const hash = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-        data: {
-            username,
-            email,
-            password: hash,
-            avatar: users.lib.avatars.random(),
-        },
-    });
+        const user = await prisma.user.create({
+            data: {
+                username,
+                email,
+                password: hash,
+                avatar: users.lib.avatars.random(),
+            },
+        });
 
-    res.status(201).json({
-        credentials: shared.credentials(user),
-    });
-});
+        res.status(201).json({
+            credentials: shared.credentials(user),
+        });
+    },
+);
 
 router.get("/oauth2/google", (req, res) => {
     res.redirect(oauth2.google.authorizationURL);
@@ -78,7 +83,7 @@ router.get("/oauth2/google", (req, res) => {
 
 router.get(
     "/oauth2/google/redirect",
-    validation.check(dtos.GoogleRedirect),
+    validation.check.http(dtos.GoogleRedirect),
     async (req, res) => {
         const {code} = req.query as dtos.GoogleRedirectQuery;
 
@@ -103,7 +108,7 @@ router.get(
 
 router.post(
     "/oauth2/google/register",
-    validation.check(dtos.GoogleRegister),
+    validation.check.http(dtos.GoogleRegister),
     async (req, res) => {
         const {username} = req.body as dtos.GoogleRegisterBody;
 

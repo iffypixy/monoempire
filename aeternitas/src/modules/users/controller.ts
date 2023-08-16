@@ -10,12 +10,16 @@ export const router = Router();
 
 export const route = "/users";
 
-router.get("/@/:username", validation.check(dtos.GetUser), async (req, res) => {
-    const {username} = req.params as dtos.GetUserParams;
+router.get(
+    "/@/:username",
+    validation.check.http(dtos.GetUser),
+    async (req, res) => {
+        const {username} = req.params as dtos.GetUserParams;
 
-    const user = await prisma.user.findUnique({where: {username}});
+        const user = await prisma.user.findUnique({where: {username}});
 
-    res.json({
-        user: shared.user(user),
-    });
-});
+        res.json({
+            user: shared.user(user),
+        });
+    },
+);

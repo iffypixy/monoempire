@@ -2,7 +2,7 @@ import z from "zod";
 
 import {validation} from "@lib/validation";
 
-export const GoogleRegister = validation.create({
+export const GoogleRegister = validation.schema({
     body: z.object({
         username: z
             .string()

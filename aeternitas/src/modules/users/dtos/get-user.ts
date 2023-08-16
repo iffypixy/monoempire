@@ -2,7 +2,7 @@ import z from "zod";
 
 import {validation} from "@lib/validation";
 
-export const GetUser = validation.create({
+export const GetUser = validation.schema({
     params: z.object({
         username: z.string().nonempty(),
     }),

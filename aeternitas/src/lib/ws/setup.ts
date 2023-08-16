@@ -1,9 +1,8 @@
 import {Server as HTTPServer} from "http";
-import {Server as WSServer} from "socket.io";
+import {Socket, Server as WSServer} from "socket.io";
 
 import {config} from "@lib/config";
 import {session} from "@lib/session";
-import {Acknowledge} from "./middlewares/validation";
 
 type WsGateway = (server: WSServer) => void;
 
@@ -21,6 +20,13 @@ export const setup = (server: HTTPServer, gateways: WsGateway[]) => {
 };
 
 export const gateway = (g: WsGateway) => g;
+
+interface AcknowledgeOptions {
+    msg?: string;
+    payload?: any;
+}
+
+type Acknowledge = (ok: boolean, options?: AcknowledgeOptions) => void;
 
 type WsMiddleware<T> = (
     payload: T,
@@ -63,3 +69,7 @@ export const events = <T extends WsEvents>(prefix: string, events: T): T => {
 
     return modified as T;
 };
+
+type WsGuard = (socket: Socket) => boolean;
+
+export const guard = (g: WsGuard) => g;

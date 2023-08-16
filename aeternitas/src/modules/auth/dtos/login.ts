@@ -2,7 +2,7 @@ import z from "zod";
 
 import {validation} from "@lib/validation";
 
-export const Login = validation.create({
+export const Login = validation.schema({
     body: z.object({
         username: z.string().nonempty(),
         email: z.string().email(),

@@ -1,5 +1,6 @@
 import {ws} from "@lib/ws";
 import {redis} from "@lib/redis";
+import {validation} from "@lib/validation";
 
 import * as dtos from "../dtos";
 import {constants} from "../constants";
@@ -20,7 +21,7 @@ export const gateway = ws.gateway((io) => {
         socket.on(
             events.server.PLAY_CARD,
             ws.handler<dtos.PlayCard>(
-                [ws.mws.validate(dtos.PlayCard)],
+                [validation.check.ws(dtos.PlayCard)],
                 async (payload, acknowledge) => {
                     const match = await redis.service.get<IMatch>(
                         `${constants.redis.MATCH}:${payload.matchId}`,
