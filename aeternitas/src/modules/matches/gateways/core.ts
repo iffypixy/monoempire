@@ -10,7 +10,7 @@ const events = ws.events("match", {
     client: {},
     server: {
         PLAY_CARD: "play-card",
-        NOPE: "nope",
+        PLAY_NOPE: "play-nope",
         JOIN: "join",
         RESIGN: "resign",
     },
