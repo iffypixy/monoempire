@@ -12,15 +12,4 @@ module.exports = {
     rules: {
         "@typescript-eslint/no-explicit-any": "off",
     },
-    overrides: [
-        {
-            files: ".eslintrc.js",
-            env: {
-                node: true,
-            },
-            parserOptions: {
-                sourceType: "script",
-            },
-        },
-    ],
 };
