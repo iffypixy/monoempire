@@ -21,15 +21,14 @@ export class OAuth2GoogleService extends OAuth2Provider<OAuth2GoogleCredentials>
             client_secret: config.get("oauth2.google.client.secret")!,
             redirect_uri: config.get("oauth2.google.redirectURI")!,
             loadCredentials: async (options) => {
-                const res = await axios.get<OAuth2GoogleCredentials>(
-                    process.env.GOOGLE_USER_INFO,
-                    {
-                        params: {
-                            alt: "json",
-                            access_token: options.access_token,
-                        },
+                const url = config.get("oauth2.google.credentialsURI")!;
+
+                const res = await axios.get<OAuth2GoogleCredentials>(url, {
+                    params: {
+                        alt: "json",
+                        access_token: options.access_token,
                     },
-                );
+                });
 
                 return res.data;
             },
