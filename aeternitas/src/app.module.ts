@@ -12,7 +12,7 @@ import {OAuth2Module} from "@lib/oauth2";
 @Module({
     imports: [
         ConfigModule.forRoot({
-            load: config,
+            load: [config],
             envFilePath: ".env",
             isGlobal: true,
         }),
