@@ -1,8 +1,16 @@
 import Redis from "ioredis";
 
-import {config} from "@lib/config";
+import {Nullable} from "@lib/types";
 
-export const client = new Redis({
-    host: config.redis.HOST,
-    port: config.redis.PORT,
-});
+export const redis: {
+    client: Nullable<Redis>;
+    setup: () => void;
+} = {
+    client: null,
+    setup() {
+        this.client = new Redis({
+            host: process.env.REDIS_HOST,
+            port: Number(process.env.REDIS_PORT),
+        });
+    },
+};

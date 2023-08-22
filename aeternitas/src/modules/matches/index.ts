@@ -1,5 +1,2 @@
-import {gateways} from "./gateways";
-import {IMatch} from "./lib/match";
-
-export const matches = {gateways};
-export type {IMatch};
+export {MatchesModule} from "./module";
+export type {IMatch} from "./lib";

@@ -1,31 +1,38 @@
-import fetch from "node-fetch";
+import {Injectable} from "@nestjs/common";
+import {ConfigService} from "@nestjs/config";
+import axios from "axios";
 
-import {config} from "@lib/config";
+import {OAuth2Provider} from "../provider";
 
-import {OAuth2} from "../oauth2";
-
-interface GoogleCredentials {
+interface OAuth2GoogleCredentials {
     id: number;
     email: string;
-    verified: boolean;
+    verified_email: boolean;
 }
 
-export const google = new OAuth2<GoogleCredentials>({
-    authorization: config.google.AUTHORIZATION,
-    token: config.google.TOKEN,
-    scope: config.google.SCOPE,
-    client_id: config.google.CLIENT_ID,
-    client_secret: config.google.CLIENT_SECRET,
-    redirect_uri: config.google.REDIRECT_URI,
-    credentials: async (options) => {
-        const qs = new URLSearchParams({
-            alt: "json",
-            access_token: options.access_token,
+@Injectable()
+export class OAuth2GoogleService extends OAuth2Provider<OAuth2GoogleCredentials> {
+    constructor(private readonly config: ConfigService) {
+        super({
+            authorization: config.get("oauth2.google.authorizationURI")!,
+            token: config.get("oauth2.google.token")!,
+            scope: config.get("oauth2.google.scope")!,
+            client_id: config.get("oauth2.google.client.id")!,
+            client_secret: config.get("oauth2.google.client.secret")!,
+            redirect_uri: config.get("oauth2.google.redirectURI")!,
+            loadCredentials: async (options) => {
+                const res = await axios.get<OAuth2GoogleCredentials>(
+                    process.env.GOOGLE_USER_INFO,
+                    {
+                        params: {
+                            alt: "json",
+                            access_token: options.access_token,
+                        },
+                    },
+                );
+
+                return res.data;
+            },
         });
-
-        const res = await fetch(`${config.google.USER_INFO}?${qs}`);
-        const json = (await res.json()) as GoogleCredentials;
-
-        return json;
-    },
-});
+    }
+}

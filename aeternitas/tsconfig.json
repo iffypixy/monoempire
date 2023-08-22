@@ -2,21 +2,25 @@
     "compilerOptions": {
         "module": "commonjs",
         "lib": ["ESNext"],
+        "target": "ES6",
         "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "target": "ES2017",
         "sourceMap": true,
-        "outDir": "./dist",
-        "baseUrl": "./",
         "incremental": true,
         "skipLibCheck": true,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
         "paths": {
             "@config/*": ["./src/config", "./src/config/*"],
+            "@lib/*": ["./src/lib", "./src/lib/*"],
             "@modules/*": ["./src/modules", "./src/modules/*"],
-            "@lib/*": ["./src/lib", "./src/lib/*"]
+            "@/*": ["./", "./*"]
         }
     },
     "include": ["./src", "./types"]

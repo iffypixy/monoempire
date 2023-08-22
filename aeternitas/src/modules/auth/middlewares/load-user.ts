@@ -1,11 +1,19 @@
-import {RequestHandler} from "express";
+import {Injectable, NestMiddleware} from "@nestjs/common";
+import {Request, Response, NextFunction} from "express";
 
-import {prisma} from "@lib/prisma";
+import {PrismaService} from "@lib/prisma";
 
-export const loadUser: RequestHandler = async (req, res, next) => {
-    req.session.user = await prisma.user.findUnique({
-        where: {id: req.session.userId},
-    });
+@Injectable()
+export class LoadUser implements NestMiddleware {
+    constructor(private readonly prisma: PrismaService) {}
 
-    next();
-};
+    async use(req: Request, res: Response, next: NextFunction) {
+        if (req.session.userId) {
+            req.session.user = await this.prisma.user.findUnique({
+                where: {id: req.session.userId},
+            });
+        }
+
+        next();
+    }
+}

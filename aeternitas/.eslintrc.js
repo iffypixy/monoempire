@@ -14,7 +14,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ".eslintrc.{js,cjs}",
+            files: ".eslintrc.js",
             env: {
                 node: true,
             },

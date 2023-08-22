@@ -1,8 +1,9 @@
-import {z} from "zod";
+import {IsString} from "class-validator";
 
-export const PlayCard = z.object({
-    matchId: z.string().nonempty(),
-    cardId: z.string().nonempty(),
-});
+export class PlayCard {
+    @IsString()
+    matchId: string;
 
-export type PlayCard = z.infer<typeof PlayCard>;
+    @IsString()
+    cardId: string;
+}

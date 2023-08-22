@@ -1,1 +1,1 @@
-export {loadUser} from "./load-user";
+export {LoadUser} from "./load-user";

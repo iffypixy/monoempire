@@ -1,1 +1,1 @@
-export {isAuthenticated} from "./is-authenticated";
+export {IsHTTPAuthenticated, IsWSAuthenticated} from "./is-authenticated";

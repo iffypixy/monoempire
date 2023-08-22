@@ -1,7 +1,6 @@
-import {z} from "zod";
+import {IsString} from "class-validator";
 
-export const JoinPublicQueue = z.object({
-    username: z.string().nonempty(),
-});
-
-export type JoinPublicQueue = z.infer<typeof JoinPublicQueue>;
+export class JoinPublicQueue {
+    @IsString()
+    username: string;
+}

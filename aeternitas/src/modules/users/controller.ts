@@ -1,25 +1,24 @@
-import {Router} from "express";
+import {Controller, Get, NotFoundException, Param} from "@nestjs/common";
 
-import {validation} from "@lib/validation";
-import {prisma} from "@lib/prisma";
-import {shared} from "@lib/shared";
+import {PrismaService} from "@lib/prisma";
+import {sanitized} from "@lib/sanitized";
 
 import * as dtos from "./dtos";
 
-export const router = Router();
+@Controller("users")
+export class UsersController {
+    constructor(private readonly prisma: PrismaService) {}
 
-export const route = "/users";
-
-router.get(
-    "/@/:username",
-    validation.check.http(dtos.GetUser),
-    async (req, res) => {
-        const {username} = req.params as dtos.GetUserParams;
-
-        const user = await prisma.user.findUnique({where: {username}});
-
-        res.json({
-            user: shared.user(user),
+    @Get("@/:username")
+    async getUserByUsername(@Param() dto: dtos.GetUserParams) {
+        const user = await this.prisma.user.findUnique({
+            where: {username: dto.username},
         });
-    },
-);
+
+        if (!user) throw new NotFoundException("No user found");
+
+        return {
+            user: sanitized.user(user),
+        };
+    }
+}

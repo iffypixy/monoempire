@@ -1,4 +1,3 @@
-import {client} from "./client";
-import {service} from "./service";
-
-export const redis = {client, service};
+export {RedisService} from "./service";
+export {RedisModule} from "./module";
+export {redis} from "./client";

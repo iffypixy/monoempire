@@ -1,4 +1,3 @@
-import {gateway as p} from "./public";
-import {gateway as core} from "./core";
-
-export const gateways = {public: p, core};
+export {CompetitiveMatchesGateway} from "./competitive";
+export {MatchesCoreGateway} from "./core";
+export {PublicMatchesGateway} from "./public";

@@ -1,14 +1,21 @@
-import {RequestHandler} from "express";
+import {Injectable, CanActivate, ExecutionContext} from "@nestjs/common";
+import {Request} from "express";
+import {Socket} from "socket.io";
 
-import {ws} from "@lib/ws";
+@Injectable()
+export class IsHTTPAuthenticated implements CanActivate {
+    canActivate(context: ExecutionContext) {
+        const request = context.switchToHttp().getRequest() as Request;
 
-export const isAuthenticated = {
-    http: ((req, res, next) => {
-        const is = !!req.session.userId;
+        return !!request.session.userId;
+    }
+}
 
-        if (is) return next();
+@Injectable()
+export class IsWSAuthenticated implements CanActivate {
+    canActivate(context: ExecutionContext) {
+        const socket = context.switchToWs().getClient() as Socket;
 
-        return res.status(401).json("Not authenticated");
-    }) as RequestHandler,
-    ws: ws.guard((socket) => !!socket.request.session.userId),
-};
+        return !!socket.request.session.userId;
+    }
+}

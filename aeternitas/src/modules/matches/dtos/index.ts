@@ -1,2 +1,2 @@
-export * from "./join-public-queue";
-export * from "./play-card";
+export {JoinPublicQueue} from "./join-public-queue";
+export {PlayCard} from "./play-card";

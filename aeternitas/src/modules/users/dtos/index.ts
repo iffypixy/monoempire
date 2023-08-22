@@ -1,1 +1,1 @@
-export * from "./get-user";
+export {GetUserParams} from "./get-user";

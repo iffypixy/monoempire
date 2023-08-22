@@ -234,7 +234,7 @@ interface PileGenerateOptions {
 const generate = (options: PileGenerateOptions) => {
     const {players, deck: type = "default", expansions = []} = options;
 
-    let deck: CardName[];
+    let deck: CardName[] = [];
 
     if (type === "default") deck = cards.default;
     else if (type === "core")
@@ -260,7 +260,7 @@ const generate = (options: PileGenerateOptions) => {
     const pile = new Array(total).map(() => utils.random(regular));
 
     special.forEach((card) =>
-        pile.push(...new Array(distribution[card](players)).fill(card)),
+        pile.push(...new Array(distribution[card]!(players)).fill(card)),
     );
 
     const hands = new Array(players).map(() => [

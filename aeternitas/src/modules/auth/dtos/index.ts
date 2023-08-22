@@ -1,3 +1,3 @@
 export * from "./google";
-export * from "./login";
-export * from "./register";
+export {LoginBody} from "./login";
+export {RegisterBody} from "./register";

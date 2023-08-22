@@ -1,27 +1,31 @@
-import {RedisKey} from "ioredis";
+import {Inject, Injectable} from "@nestjs/common";
+import {Redis} from "ioredis";
 
-import {client} from "./client";
+import {REDIS_TOKEN} from "./constants";
 
-const get = async <T>(key: RedisKey): Promise<T | null> => {
-    const json = await client.get(key);
+@Injectable()
+export class RedisService {
+    constructor(@Inject(REDIS_TOKEN) readonly redis: Redis) {}
 
-    return JSON.parse(json);
-};
+    async get<T>(key: string): Promise<T | null> {
+        const json = await this.redis.get(key);
 
-const set = async <T>(key: RedisKey, value: T) => {
-    await client.set(key, JSON.stringify(value));
-};
+        return JSON.parse(json || "");
+    }
 
-const update = async <T>(key: RedisKey, partial: Partial<T>) => {
-    const value = (await get(key)) || {};
+    async set<T>(key: string, value: T): Promise<void> {
+        await this.redis.set(key, JSON.stringify(value));
+    }
 
-    const updated = {...(value as object), ...partial};
+    async update<T>(key: string, partial: Partial<T>): Promise<void> {
+        const value = (await this.get<T>(key)) || {};
 
-    await set(key, updated);
-};
+        const updated = {...value, ...partial};
 
-const del = async (key: RedisKey) => {
-    await client.del(key);
-};
+        await this.set(key, updated);
+    }
 
-export const service = {get, set, update, delete: del};
+    async delete(key: string): Promise<void> {
+        await this.redis.del(key);
+    }
+}

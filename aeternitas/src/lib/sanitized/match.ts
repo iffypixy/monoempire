@@ -35,7 +35,7 @@ export const match = (m: IMatch): SharedMatch => {
         id: player.id,
         username: player.username,
         avatar: player.avatar,
-        user: user(player.user),
+        user: player.user && user(player.user),
         hand: {
             cards: player.hand.cards.length,
             marked: player.hand.marked,
@@ -44,7 +44,7 @@ export const match = (m: IMatch): SharedMatch => {
 
     const spectators = m.spectators.map((spectator) => ({
         ...spectator,
-        user: user(spectator.user),
+        user: spectator.user && user(spectator.user),
     }));
 
     return {

@@ -1,2 +1,2 @@
-export * from "./redirect";
-export * from "./register";
+export {GoogleRedirectQuery} from "./redirect";
+export {GoogleRegisterBody} from "./register";

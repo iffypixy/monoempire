@@ -1,1 +1,1 @@
-export {google} from "./google";
+export {OAuth2GoogleService} from "./google";

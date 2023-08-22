@@ -1,13 +1,23 @@
-import express from "express";
+import {NestFactory} from "@nestjs/core";
 
-import {auth} from "@modules/auth";
-import {users} from "@modules/users";
 import {session} from "@lib/session";
+import {redis} from "@lib/redis";
 
-export const app = express();
+import {AppModule} from "./app.module";
 
-app.use(express.json());
-app.use(session);
+async function bootstrap() {
+    const app = await NestFactory.create(AppModule, {
+        cors: {
+            credentials: true,
+        },
+    });
 
-app.use(auth.route, auth.router);
-app.use(users.route, users.router);
+    redis.setup();
+
+    app.use(session());
+    app.setGlobalPrefix("api");
+
+    app.listen(8000);
+}
+
+bootstrap();
