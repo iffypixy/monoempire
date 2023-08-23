@@ -1,4 +1,4 @@
-import * as s from "express-session";
+import s from "express-session";
 import Store from "connect-redis";
 
 import {redis} from "@lib/redis";
