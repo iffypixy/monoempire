@@ -15,6 +15,8 @@ export const clusterize = (cb: () => void) => {
             cluster.fork();
         });
     } else {
+        console.log(`Worker ${process.pid} is running`);
+
         cb();
     }
 };
