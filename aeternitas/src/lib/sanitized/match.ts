@@ -1,9 +1,9 @@
 import {IMatch} from "@modules/matches";
 import {Nullable} from "@lib/types";
 
-import {SharedUser, user} from "./user";
+import {SanitizedUser, user} from "./user";
 
-interface SharedMatch {
+interface SanitizedMatch {
     id: IMatch["id"];
     turn: IMatch["turn"];
     context: IMatch["context"];
@@ -14,14 +14,14 @@ interface SharedMatch {
         id: string;
         username: string;
         avatar: string;
-        user: Nullable<SharedUser>;
+        user: Nullable<SanitizedUser>;
     }[];
 
     spectators: {
         id: string;
         username: string;
         avatar: string;
-        user: Nullable<SharedUser>;
+        user: Nullable<SanitizedUser>;
     }[];
 
     piles: {
@@ -30,7 +30,7 @@ interface SharedMatch {
     };
 }
 
-export const match = (m: IMatch): SharedMatch => {
+export const match = (m: IMatch): SanitizedMatch => {
     const players = m.players.map((player) => ({
         id: player.id,
         username: player.username,
@@ -43,7 +43,9 @@ export const match = (m: IMatch): SharedMatch => {
     }));
 
     const spectators = m.spectators.map((spectator) => ({
-        ...spectator,
+        id: spectator.id,
+        username: spectator.username,
+        avatar: spectator.avatar,
         user: spectator.user && user(spectator.user),
     }));
 
