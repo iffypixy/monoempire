@@ -4,16 +4,22 @@
         "lib": ["ESNext"],
         "target": "ES6",
         "removeComments": true,
+
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
+
         "incremental": true,
         "skipLibCheck": true,
+
         "strictNullChecks": true,
+        "strictBindCallApply": false,
         "noImplicitAny": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
+
         "outDir": "./dist",
         "baseUrl": "./",
         "paths": {
