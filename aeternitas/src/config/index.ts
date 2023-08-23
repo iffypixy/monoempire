@@ -1,6 +1,8 @@
 export const config = () => {
     const env = process.env;
 
+    const registration = (path: string) => `${env.CLIENT_ORIGIN}${path}`;
+
     return {
         oauth2: {
             google: {
@@ -18,7 +20,7 @@ export const config = () => {
         client: {
             origin: env.CLIENT_ORIGIN,
             registration: {
-                google: `${env.CLIENT_ORIGIN}${env.CLIENT_GOOGLE_REGISTRATION}`,
+                google: registration(env.CLIENT_GOOGLE_REGISTRATION),
             },
         },
         redis: {
