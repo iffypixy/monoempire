@@ -1,17 +1,15 @@
-type CenterProps = React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
->;
+import {cx} from "class-variance-authority";
 
-export const Center: React.FC<CenterProps> = ({
-    children,
-    className,
-    ...rest
-}) => (
+type CenterProps = React.ComponentProps<"div">;
+
+export const Center: React.FC<CenterProps> = (props) => (
     <div
-        {...rest}
-        className={`${"w-full h-full flex justify-center items-center"} ${className}`}
+        {...props}
+        className={cx(
+            "w-full h-full flex justify-center items-center",
+            props.className,
+        )}
     >
-        {children}
+        {props.children}
     </div>
 );
