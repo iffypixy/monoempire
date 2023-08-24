@@ -47,7 +47,7 @@
     --paper-primary: #000000;
     --paper-secondary: #0d0d0d;
     --paper-contrast: #ffffff;
-    --home-bg: url("./shared/assets/topography/topography-dark.svg");
+    --home-bg: url("./shared/assets/topography/dark.svg");
 }
 
 [data-theme="light"] {
@@ -60,7 +60,7 @@
     --paper-primary: #ffffff;
     --paper-secondary: #f2f2f2;
     --paper-contrast: #000000;
-    --home-bg: url("./shared/assets/topography/topography-light.svg");
+    --home-bg: url("./shared/assets/topography/light.svg");
 }
 
 [data-theme="night"] {
@@ -73,7 +73,7 @@
     --paper-primary: #0f1729;
     --paper-secondary: #192644;
     --paper-contrast: #ffffff;
-    --home-bg: url("./shared/assets/topography/topography-night.svg");
+    --home-bg: url("./shared/assets/topography/night.svg");
 }
 
 [data-theme="dracula"] {
@@ -86,5 +86,5 @@
     --paper-primary: #272935;
     --paper-secondary: #353848;
     --paper-contrast: #ffffff;
-    --home-bg: url("./shared/assets/topography/topography-dracula.svg");
+    --home-bg: url("./shared/assets/topography/dracula.svg");
 }
