@@ -1,16 +1,4 @@
-import {cva, cx} from "class-variance-authority";
-
-interface CustomButtonProps {
-    size?: "small" | "large";
-    color?: "primary" | "secondary";
-    variant?: "outlined" | "contained";
-}
-
-type ButtonProps = React.DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-> &
-    CustomButtonProps;
+import {cva, cx, VariantProps} from "class-variance-authority";
 
 const styles = cva(
     "font-bold uppercase rounded-md cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition duration-300",
@@ -39,7 +27,7 @@ const styles = cva(
             {
                 color: "primary",
                 variant: "outlined",
-                className: `text-primary border-2 border-primary hover:bg-primary hover:text-primary-contrast`,
+                className: `text-primary border-4 border-primary hover:bg-primary hover:text-primary-contrast`,
             },
             {
                 color: "secondary",
@@ -49,7 +37,7 @@ const styles = cva(
             {
                 color: "secondary",
                 variant: "outlined",
-                className: `text-secondary border-2 border-secondary hover:bg-secondary hover:text-secondary-contrast`,
+                className: `text-secondary border-4 border-secondary hover:bg-secondary hover:text-secondary-contrast`,
             },
         ],
         defaultVariants: {
@@ -59,6 +47,8 @@ const styles = cva(
         },
     },
 );
+
+type ButtonProps = VariantProps<typeof styles> & React.ComponentProps<"button">;
 
 export const Button: React.FC<ButtonProps> = ({
     children,
