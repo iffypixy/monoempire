@@ -1,49 +1,38 @@
-import {
-    MoonIcon,
-    SunIcon,
-    SwatchIcon,
-    FireIcon,
-    EyeDropperIcon,
-} from "@heroicons/react/24/outline";
+import {useState} from "react";
+import {useSelector} from "react-redux";
+import {HiOutlineSwatch} from "react-icons/hi2";
 import {cva} from "class-variance-authority";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {useSelector} from "react-redux";
-import {useState} from "react";
 
 import {useDispatch} from "@shared/lib/store";
+import {Icons} from "@shared/ui/icons";
+import {Icon} from "@shared/lib/types";
 
 import {themes, Theme} from "./themes";
 import {selectors, actions} from "./model";
-
-type Icon = React.ForwardRefExoticComponent<
-    React.PropsWithoutRef<React.SVGProps<SVGSVGElement>> & {
-        title?: string;
-        titleId?: string;
-    } & React.RefAttributes<SVGSVGElement>
->;
 
 interface ThemeContext {
     icon: Icon;
 }
 
-const context: Record<Theme, ThemeContext> = {
+const contexts: Record<Theme, ThemeContext> = {
     light: {
-        icon: SunIcon,
+        icon: Icons.Sun,
     },
     dark: {
-        icon: MoonIcon,
+        icon: Icons.BatMoon,
     },
     night: {
-        icon: FireIcon,
+        icon: Icons.CloudyMoon,
     },
     dracula: {
-        icon: EyeDropperIcon,
+        icon: Icons.BloodKnife,
     },
 };
 
 const styles = {
     item: cva(
-        "border-2 rounded-lg outline-none overflow-hidden hover:border-accent transition-colors duration-300",
+        "border-4 rounded-lg outline-none overflow-hidden hover:border-accent transition-colors duration-300",
         {
             variants: {
                 isSelected: {
@@ -56,7 +45,7 @@ const styles = {
         },
     ),
     button: cva(
-        "w-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500",
+        "w-14 h-14 text-primary rounded-lg p-2 hover:shadow-even-lg hover:shadow-primary hover:bg-primary hover:text-primary-contrast transition duration-500",
         {
             variants: {
                 isActive: {
@@ -87,7 +76,9 @@ export const ThemeDropdown: React.FC = () => {
         >
             <DropdownMenu.Trigger asChild className="outline-none">
                 <button>
-                    <SwatchIcon className={styles.button({isActive: isOpen})} />
+                    <HiOutlineSwatch
+                        className={styles.button({isActive: isOpen})}
+                    />
                 </button>
             </DropdownMenu.Trigger>
 
@@ -102,7 +93,7 @@ export const ThemeDropdown: React.FC = () => {
 
                     <div className="grid grid-cols-1 gap-y-4 bg-paper-secondary rounded-lg p-5">
                         {themes.map((theme) => {
-                            const {icon: Icon} = context[theme];
+                            const {icon: Icon} = contexts[theme];
 
                             return (
                                 <DropdownMenu.Item
@@ -122,7 +113,7 @@ export const ThemeDropdown: React.FC = () => {
                                             data-theme={theme}
                                             className="grid grid-cols-[auto_auto_auto] gap-x-6 p-3 bg-paper-primary items-center"
                                         >
-                                            <Icon className="w-5 text-primary" />
+                                            <Icon className="w-5 fill-primary" />
 
                                             <p className="font-semibold text-base text-paper-contrast">
                                                 {theme}
