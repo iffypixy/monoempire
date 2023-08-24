@@ -3,10 +3,9 @@ import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
 
 import {store} from "@shared/lib/store";
+import "@shared/lib/i18n/config";
 
 import {App} from "./app";
-
-import "@shared/lib/i18n/config";
 
 import "./index.css";
 
