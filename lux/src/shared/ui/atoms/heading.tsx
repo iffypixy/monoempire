@@ -1,55 +1,83 @@
-import {cva, cx} from "class-variance-authority";
+import {VariantProps, cva, cx} from "class-variance-authority";
 
-const styles = cva("text-paper-contrast", {
-    variants: {
-        level: {
-            1: "text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold",
-            2: "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold",
-            3: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold",
-            4: "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold",
-            5: "text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold",
-            6: "text-base sm:text-lg md:text-xl lg:text-2xl font-semibold",
-        },
-    },
-});
+const styles = cva("text-paper-contrast");
 
-type HProps = React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLHeadingElement>,
-    HTMLHeadingElement
->;
+type HProps = VariantProps<typeof styles> & React.ComponentProps<"h1">;
 
 export const H1: React.FC<HProps> = (props) => (
-    <h1 {...props} className={cx(styles({level: 1}), props.className)}>
+    <h1
+        {...props}
+        className={cx(
+            "text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
     </h1>
 );
 
 export const H2: React.FC<HProps> = (props) => (
-    <h1 {...props} className={cx(styles({level: 2}), props.className)}>
+    <h2
+        {...props}
+        className={cx(
+            "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
-    </h1>
+    </h2>
 );
 
 export const H3: React.FC<HProps> = (props) => (
-    <h1 {...props} className={cx(styles({level: 3}), props.className)}>
+    <h3
+        {...props}
+        className={cx(
+            "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
-    </h1>
+    </h3>
 );
 
 export const H4: React.FC<HProps> = (props) => (
-    <h1 {...props} className={cx(styles({level: 4}), props.className)}>
+    <h4
+        {...props}
+        className={cx(
+            "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
-    </h1>
+    </h4>
 );
 
 export const H5: React.FC<HProps> = (props) => (
-    <h1 {...props} className={cx(styles({level: 5}), props.className)}>
+    <h5
+        {...props}
+        className={cx(
+            "text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
-    </h1>
+    </h5>
 );
 
 export const H6: React.FC<HProps> = (props) => (
-    <h6 {...props} className={cx(styles({level: 6}), props.className)}>
+    <h6
+        {...props}
+        className={cx(
+            "text-base sm:text-lg md:text-xl lg:text-2xl font-semibold",
+            styles(),
+            props.className,
+        )}
+    >
         {props.children}
     </h6>
 );
