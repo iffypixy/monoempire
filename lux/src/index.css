@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    html {
+        font-size: 100%;
+
+        @media screen(2xl) {
+            font-size: 90%;
+        }
+
+        @media screen(xl) {
+            font-size: 80%;
+        }
+
+        @media screen(lg) {
+            font-size: 70%;
+        }
+
+        @media screen(md) {
+            font-size: 60%;
+        }
+
+        @media screen(sm) {
+            font-size: 50%;
+        }
+    }
+
+    body {
+        @apply font-body;
+        @apply text-base;
+        @apply text-paper-contrast;
+    }
+}
+
 @font-face {
     font-family: "Unbounded";
     font-weight: 400;

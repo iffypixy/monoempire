@@ -1,7 +1,13 @@
 export default {
     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
+        fontFamily: {
+            body: "Unbounded, cursive",
+        },
         extend: {
+            fontSize: {
+                body: "1rem",
+            },
             boxShadow: flatten({
                 even: {
                     lg: "0 0 50px -1px rgb(0 0 0 / 0.1)",
@@ -49,8 +55,22 @@ export default {
                 },
             },
         },
-        fontFamily: {
-            body: "Unbounded, cursive",
+        screens: {
+            "2xl": {
+                max: "1632px",
+            },
+            xl: {
+                max: "1344px",
+            },
+            lg: {
+                max: "1056px",
+            },
+            md: {
+                max: "768px",
+            },
+            sm: {
+                max: "480px",
+            },
         },
     },
 
