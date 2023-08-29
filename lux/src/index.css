@@ -73,6 +73,7 @@
     --primary-color: #ffc069;
     --secondary-color: #69a8ff;
     --accent-color: #b74f6f;
+    --error-color: #b00020;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #ffffff;
@@ -86,6 +87,7 @@
     --primary-color: #e6ad5f;
     --secondary-color: #69a8ff;
     --accent-color: #b74f6f;
+    --error-color: #b00020;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #ffffff;
@@ -99,6 +101,7 @@
     --primary-color: #3abff8;
     --secondary-color: #828df8;
     --accent-color: #f471b5;
+    --error-color: #b00020;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #000000;
@@ -110,10 +113,11 @@
 
 [data-theme="dracula"] {
     --primary-color: #ff7ac6;
-    --primary-color-contrast: #000000;
     --secondary-color: #bf95f9;
-    --secondary-color-contrast: #000000;
     --accent-color: #ffb86b;
+    --error-color: #b00020;
+    --primary-color-contrast: #000000;
+    --secondary-color-contrast: #000000;
     --accent-color-contrast: #000000;
     --paper-primary: #272935;
     --paper-secondary: #353848;
