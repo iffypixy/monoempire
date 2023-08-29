@@ -48,6 +48,9 @@ export default {
                     DEFAULT: "var(--accent-color)",
                     contrast: "var(--accent-color-contrast)",
                 },
+                error: {
+                    DEFAULT: "var(--error-color)",
+                },
                 paper: {
                     primary: "var(--paper-primary)",
                     secondary: "var(--paper-secondary)",
