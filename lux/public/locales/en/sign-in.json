@@ -1,0 +1,10 @@
+{
+    "error": {
+        "emailOrUsername": {
+            "required": "Email or username is required"
+        },
+        "password": {
+            "required": "Password is required"
+        }
+    }
+}
