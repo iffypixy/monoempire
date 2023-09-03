@@ -31,6 +31,7 @@
         @apply font-body;
         @apply text-base;
         @apply text-paper-contrast;
+        @apply bg-paper-primary;
     }
 }
 
