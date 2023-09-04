@@ -9,12 +9,10 @@ import {
 } from "@nestjs/common";
 import {SessionWithData} from "express-session";
 import bcrypt from "bcrypt";
-import {User} from "@prisma/client";
 
 import {users} from "@modules/users";
 import {PrismaService} from "@lib/prisma";
 import {sanitized} from "@lib/sanitized";
-import {Nullable} from "@lib/types";
 
 import {IsHTTPAuthenticated} from "../guards";
 import * as dtos from "../dtos";
@@ -32,19 +30,20 @@ export class LocalAuthController {
     }
 
     @Post("/login")
-    async login(@Body() dto: dtos.LoginBody) {
-        let user: Nullable<User> = null;
+    async login(
+        @Body() dto: dtos.LoginBody,
+        @Session() session: SessionWithData,
+    ) {
+        let user = await this.prisma.user.findUnique({
+            where: {
+                email: dto.emailOrUsername,
+            },
+        });
 
-        if (dto.username)
-            user = await this.prisma.user.findFirst({
+        if (!user)
+            user = await this.prisma.user.findUnique({
                 where: {
-                    username: dto.username,
-                },
-            });
-        else if (dto.email)
-            user = await this.prisma.user.findFirst({
-                where: {
-                    email: dto.email,
+                    username: dto.emailOrUsername,
                 },
             });
 
@@ -56,13 +55,19 @@ export class LocalAuthController {
 
         if (!match) throw exception;
 
+        session.userId = user.id;
+        session.user = user;
+
         return {
             credentials: sanitized.credentials(user),
         };
     }
 
     @Post("/register")
-    async register(@Body() dto: dtos.RegisterBody) {
+    async register(
+        @Body() dto: dtos.RegisterBody,
+        @Session() session: SessionWithData,
+    ) {
         const isUsernameTaken = await this.prisma.user.findFirst({
             where: {username: dto.username},
         });
@@ -87,6 +92,9 @@ export class LocalAuthController {
                 avatar: users.lib.avatars.random(),
             },
         });
+
+        session.userId = user.id;
+        session.user = user;
 
         return {
             credentials: sanitized.credentials(user),
