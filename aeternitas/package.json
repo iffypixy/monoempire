@@ -9,9 +9,10 @@
         "prod": "node dist/main",
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-        "migrate:dev": "prisma migrate dev",
-        "migrate:reset": "prisma migrate reset",
-        "migrate:deploy": "prisma migrate deploy",
+        "prisma:migrate:dev": "prisma migrate dev",
+        "prisma:migrate:reset": "prisma migrate reset",
+        "prisma:migrate:deploy": "prisma migrate deploy",
+        "prisma:push": "prisma db push",
         "prisma:generate": "prisma generate",
         "prisma:studio": "prisma studio"
     },
