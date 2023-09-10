@@ -75,12 +75,13 @@
     --secondary-color: #69a8ff;
     --accent-color: #b74f6f;
     --error-color: #b00020;
+    --success-color: #4bb543;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #ffffff;
     --paper-primary: #000000;
     --paper-secondary: #0d0d0d;
-    --paper-contrast: #ffffff;
+    --paper-contrast: 255 255 255;
     --home-bg: url("./shared/assets/topography/dark.svg");
 }
 
@@ -89,12 +90,13 @@
     --secondary-color: #69a8ff;
     --accent-color: #b74f6f;
     --error-color: #b00020;
+    --success-color: #4bb543;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #ffffff;
     --paper-primary: #ffffff;
     --paper-secondary: #f2f2f2;
-    --paper-contrast: #000000;
+    --paper-contrast: 0 0 0;
     --home-bg: url("./shared/assets/topography/light.svg");
 }
 
@@ -103,12 +105,13 @@
     --secondary-color: #828df8;
     --accent-color: #f471b5;
     --error-color: #b00020;
+    --success-color: #4bb543;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #000000;
     --paper-primary: #0f1729;
     --paper-secondary: #192644;
-    --paper-contrast: #ffffff;
+    --paper-contrast: 255 255 255;
     --home-bg: url("./shared/assets/topography/night.svg");
 }
 
@@ -117,11 +120,12 @@
     --secondary-color: #bf95f9;
     --accent-color: #ffb86b;
     --error-color: #b00020;
+    --success-color: #4bb543;
     --primary-color-contrast: #000000;
     --secondary-color-contrast: #000000;
     --accent-color-contrast: #000000;
     --paper-primary: #272935;
     --paper-secondary: #353848;
-    --paper-contrast: #ffffff;
+    --paper-contrast: 255 255 255;
     --home-bg: url("./shared/assets/topography/dracula.svg");
 }
