@@ -1,5 +1,5 @@
 {
-    "name": "ekittens",
+    "name": "monoempire",
     "version": "0.1.0",
     "scripts": {
         "lint": "pnpm exec lint-staged"
