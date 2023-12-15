@@ -1,8 +1,8 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {HiLanguage} from "react-icons/hi2";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {cva} from "class-variance-authority";
+import {cva, VariantProps, cx} from "class-variance-authority";
 
 import {Icon} from "@shared/lib/types";
 import {Icons} from "@shared/ui/icons";
@@ -75,15 +75,33 @@ const styles = {
                 isActive: {
                     true: "shadow-primary shadow-even-lg bg-primary text-primary-contrast",
                 },
+                variant: {
+                    contained: "bg-primary text-primary-contrast",
+                    outlined: "",
+                },
             },
             defaultVariants: {
                 isActive: false,
+                variant: "outlined",
             },
         },
     ),
 };
 
-export const LanguageDropdown: React.FC = () => {
+interface LanguageDropdownProps
+    extends Omit<VariantProps<typeof styles.button>, "isActive">,
+        React.ComponentProps<"button"> {
+    side?: React.ComponentProps<typeof DropdownMenu.Content>["side"];
+    align?: React.ComponentProps<typeof DropdownMenu.Content>["align"];
+}
+
+export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
+    side,
+    align,
+    variant,
+    className,
+    ...props
+}) => {
     const {i18n} = useTranslation();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -97,16 +115,24 @@ export const LanguageDropdown: React.FC = () => {
             }}
         >
             <DropdownMenu.Trigger asChild className="outline-none">
-                <button>
-                    <HiLanguage className={styles.button({isActive: isOpen})} />
+                <button {...props}>
+                    <HiLanguage
+                        className={cx(
+                            styles.button({
+                                isActive: isOpen,
+                                variant,
+                            }),
+                            className,
+                        )}
+                    />
                 </button>
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
                     loop
-                    side="top"
-                    align="end"
+                    side={side || "top"}
+                    align={align || "end"}
                     className="animate-slide-down-and-fade"
                 >
                     <DropdownMenu.Arrow className="fill-paper-secondary w-6 h-3" />

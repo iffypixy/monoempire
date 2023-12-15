@@ -1,15 +1,16 @@
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {HiOutlineSwatch} from "react-icons/hi2";
-import {cva} from "class-variance-authority";
+import {VariantProps, cva, cx} from "class-variance-authority";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import {useTranslation} from "react-i18next";
 
 import {useDispatch} from "@shared/lib/store";
 import {Icons} from "@shared/ui/icons";
 import {Icon} from "@shared/lib/types";
 
 import {themes, Theme} from "./themes";
-import {selectors, actions} from "./model";
+import {model} from "./model";
 
 interface ThemeContext {
     icon: Icon;
@@ -51,18 +52,38 @@ const styles = {
                 isActive: {
                     true: "shadow-primary shadow-even-lg bg-primary text-primary-contrast",
                 },
+                variant: {
+                    contained: "bg-primary text-primary-contrast",
+                    outlined: "",
+                },
             },
             defaultVariants: {
                 isActive: false,
+                variant: "outlined",
             },
         },
     ),
 };
 
-export const ThemeDropdown: React.FC = () => {
+interface ThemeDropdownProps
+    extends Omit<VariantProps<typeof styles.button>, "isActive">,
+        React.ComponentProps<"button"> {
+    side?: React.ComponentProps<typeof DropdownMenu.Content>["side"];
+    align?: React.ComponentProps<typeof DropdownMenu.Content>["align"];
+}
+
+export const ThemeDropdown: React.FC<ThemeDropdownProps> = ({
+    side,
+    align,
+    className,
+    variant,
+    ...props
+}) => {
     const dispatch = useDispatch();
 
-    const currentTheme = useSelector(selectors.theme);
+    const {t} = useTranslation("common");
+
+    const currentTheme = useSelector(model.selectors.theme);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -75,9 +96,15 @@ export const ThemeDropdown: React.FC = () => {
             }}
         >
             <DropdownMenu.Trigger asChild className="outline-none">
-                <button>
+                <button {...props}>
                     <HiOutlineSwatch
-                        className={styles.button({isActive: isOpen})}
+                        className={cx(
+                            styles.button({
+                                isActive: isOpen,
+                                variant,
+                            }),
+                            className,
+                        )}
                     />
                 </button>
             </DropdownMenu.Trigger>
@@ -85,8 +112,8 @@ export const ThemeDropdown: React.FC = () => {
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
                     loop
-                    side="top"
-                    align="end"
+                    side={side || "top"}
+                    align={align || "end"}
                     className="animate-slide-down-and-fade"
                 >
                     <DropdownMenu.Arrow className="fill-paper-secondary w-6 h-3" />
@@ -105,7 +132,9 @@ export const ThemeDropdown: React.FC = () => {
                                         event.preventDefault();
                                     }}
                                     onClick={() => {
-                                        dispatch(actions.setTheme({theme}));
+                                        dispatch(
+                                            model.actions.setTheme({theme}),
+                                        );
                                     }}
                                 >
                                     <button className="w-full">
@@ -116,7 +145,7 @@ export const ThemeDropdown: React.FC = () => {
                                             <Icon className="w-5 fill-primary" />
 
                                             <p className="font-semibold text-base text-paper-contrast">
-                                                {theme}
+                                                {t(`theme.${theme}`)}
                                             </p>
 
                                             <div className="grid grid-cols-[auto_auto_auto_auto] gap-x-1 m-auto">

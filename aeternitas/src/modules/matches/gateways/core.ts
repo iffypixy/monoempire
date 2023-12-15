@@ -46,6 +46,6 @@
 import {WebSocketGateway, OnGatewayInit} from "@nestjs/websockets";
 
 @WebSocketGateway()
-export class MatchesCoreGateway implements OnGatewayInit {
+export class CoreMatchesGateway implements OnGatewayInit {
     afterInit() {}
 }

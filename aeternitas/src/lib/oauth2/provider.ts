@@ -43,6 +43,7 @@ export class OAuth2Provider<T> {
         const res = await axios.post<TokensPayload>(this.options.token, null, {
             params,
             headers: {
+                Accept: "application/json",
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         });

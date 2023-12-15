@@ -1,9 +1,12 @@
 import {ThemeChangeListener} from "@shared/lib/theming";
+import {CredentialsLoader} from "@features/auth";
 
 import {Routes} from "./pages";
 
 export const App = () => (
     <ThemeChangeListener>
-        <Routes />
+        <CredentialsLoader>
+            <Routes />
+        </CredentialsLoader>
     </ThemeChangeListener>
 );

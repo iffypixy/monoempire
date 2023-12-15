@@ -1,22 +1,10 @@
-import {
-    BadRequestException,
-    Body,
-    Controller,
-    Get,
-    HttpCode,
-    Post,
-    Query,
-    Res,
-    Session,
-} from "@nestjs/common";
+import {Controller, Get, Query, Res, Session} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 import {SessionWithData} from "express-session";
 import {Response} from "express";
 
-import {users} from "@modules/users";
 import {OAuth2Service} from "@lib/oauth2";
 import {PrismaService} from "@lib/prisma";
-import {sanitized} from "@lib/sanitized";
 
 import * as dtos from "../dtos";
 
@@ -36,52 +24,33 @@ export class GoogleAuthController {
     @Get("redirect")
     async handleRedirect(
         @Session() session: SessionWithData,
-        @Query() dto: dtos.GoogleRedirectQuery,
+        @Query() dto: dtos.OAuth2RedirectQuery,
         @Res() res: Response,
     ) {
         const credentials = await this.oauth2.google.loadCredentials(dto.code);
 
-        const user = await this.prisma.user.findUnique({
-            where: {email: credentials.email},
+        const provider = await this.prisma.authProvider.findFirst({
+            where: {uid: credentials.id, name: "google"},
+            include: {user: true},
         });
 
-        if (user)
-            return {
-                url: this.config.get("client.origin"),
-            };
+        if (provider) {
+            session.user = provider.user;
+            session.userId = provider.userId;
+
+            return res.redirect(this.config.get("client.origin")!);
+        }
 
         session.registration = {
             interim: {
-                google: {
-                    id: credentials.id,
-                    email: credentials.email,
-                },
+                id: credentials.id,
+                email: credentials.email,
+                provider: "google",
             },
         };
 
-        res.redirect(this.config.get("client.registration.google")!);
-    }
-
-    @Post("register")
-    @HttpCode(201)
-    async register(
-        @Body() dto: dtos.GoogleRegisterBody,
-        @Session() session: SessionWithData,
-    ) {
-        const email = session.registration!.interim.google.email;
-
-        if (!email) throw new BadRequestException("No google email provided");
-
-        const user = await this.prisma.user.create({
-            data: {
-                email,
-                username: dto.username,
-                avatar: users.lib.avatars.random(),
-            },
+        session.save(() => {
+            res.redirect(this.config.get("client.registration")!);
         });
-
-        return {
-            credentials: sanitized.credentials(user),
-        };
     }
 }

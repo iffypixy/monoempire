@@ -3,6 +3,7 @@ import {
     Body,
     Controller,
     Get,
+    HttpCode,
     Post,
     Session,
     UseGuards,
@@ -68,16 +69,16 @@ export class LocalAuthController {
         @Body() dto: dtos.RegisterBody,
         @Session() session: SessionWithData,
     ) {
-        const isUsernameTaken = await this.prisma.user.findFirst({
+        const isUsernameTaken = !!(await this.prisma.user.findFirst({
             where: {username: dto.username},
-        });
+        }));
 
         if (isUsernameTaken)
             throw new BadRequestException("This username is already taken");
 
-        const isEmailTaken = await this.prisma.user.findFirst({
+        const isEmailTaken = !!(await this.prisma.user.findFirst({
             where: {email: dto.email},
-        });
+        }));
 
         if (isEmailTaken)
             throw new BadRequestException("This email is already taken");
@@ -98,6 +99,49 @@ export class LocalAuthController {
 
         return {
             credentials: sanitized.credentials(user),
+        };
+    }
+
+    @HttpCode(204)
+    @Post("logout")
+    logout(@Session() session: SessionWithData) {
+        session.user = null;
+        session.userId = null;
+    }
+
+    @Post("verify/username")
+    async verifyUsername(
+        @Body() dto: dtos.VerifyUsernameDto,
+    ): Promise<{ok: boolean}> {
+        const user = await this.prisma.user.findFirst({
+            where: {username: dto.username},
+        });
+
+        if (user)
+            return {
+                ok: false,
+            };
+
+        return {
+            ok: true,
+        };
+    }
+
+    @Post("verify/email")
+    async verifyEmail(
+        @Body() dto: dtos.VerifyEmailDto,
+    ): Promise<{ok: boolean}> {
+        const user = await this.prisma.user.findFirst({
+            where: {email: dto.email},
+        });
+
+        if (user)
+            return {
+                ok: false,
+            };
+
+        return {
+            ok: true,
         };
     }
 }

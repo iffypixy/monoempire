@@ -5,7 +5,7 @@ import axios from "axios";
 import {OAuth2Provider} from "../provider";
 
 interface OAuth2GoogleCredentials {
-    id: number;
+    id: string;
     email: string;
     verified_email: boolean;
 }

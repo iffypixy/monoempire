@@ -1,0 +1,33 @@
+{
+    "title": "Create a \n<0>new account.</0>",
+    "field": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password"
+    },
+    "error": {
+        "email": {
+            "validity": "Email is not valid.",
+            "taken": "This email is already taken."
+        },
+        "username": {
+            "min-length": "Username must be at least 4 characters long.",
+            "max-length": "Username must be at max 16 characters long.",
+            "validity": "Username is not valid.",
+            "taken": "This username is already taken."
+        },
+        "password": {
+            "min-length": "Password must be at least 8 characters long.",
+            "max-length": "Password must be at max 50 characters long."
+        }
+    },
+    "oauth2": {
+        "title": "Sign up via <0>{{provider}}</0>",
+        "signup": "Let's go! :)",
+        "loading": "Loading... :)"
+    },
+    "signup": "Create! :)",
+    "reference": {
+        "signin": "Already have an account? <0>Go sign in!</0>"
+    }
+}

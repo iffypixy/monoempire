@@ -1,0 +1,8 @@
+{
+    "theme": {
+        "light": "hell",
+        "dark": "dunkel",
+        "night": "nacht",
+        "dracula": "dracula"
+    }
+}

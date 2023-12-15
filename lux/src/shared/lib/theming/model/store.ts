@@ -16,8 +16,6 @@ export const store = createReducer<ThemingState>(
             state,
             {payload}: PayloadAction<a.SetThemePayload>,
         ) => {
-            console.log(payload);
-
             state.theme = payload.theme;
         },
     },

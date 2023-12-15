@@ -3,7 +3,7 @@ import {initReactI18next} from "react-i18next";
 import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-const namespaces = ["common", "home", "sign-up", "sign-in"];
+const namespaces = ["common", "home", "signup", "signin"];
 
 i18n.use(Backend)
     .use(LanguageDetector)
@@ -19,7 +19,9 @@ i18n.use(Backend)
             loadPath: "/locales/{{lng}}/{{ns}}.json",
         },
         ns: namespaces,
-
+        react: {
+            useSuspense: false,
+        },
         detection: {
             order: ["localStorage"],
             caches: ["localStorage"],

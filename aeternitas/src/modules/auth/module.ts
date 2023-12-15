@@ -7,12 +7,22 @@ import {
 
 import {OAuth2Module} from "@lib/oauth2";
 
-import {LocalAuthController, GoogleAuthController} from "./controllers";
+import {
+    LocalAuthController,
+    GoogleAuthController,
+    GithubAuthController,
+    OAuth2Controller,
+} from "./controllers";
 import {LoadUser} from "./middlewares";
 
 @Module({
     imports: [OAuth2Module],
-    controllers: [LocalAuthController, GoogleAuthController],
+    controllers: [
+        LocalAuthController,
+        GoogleAuthController,
+        GithubAuthController,
+        OAuth2Controller,
+    ],
 })
 export class AuthModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

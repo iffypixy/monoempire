@@ -9,10 +9,9 @@ declare module "express-session" {
         userId: Maybe<User["id"]>;
         registration: Maybe<{
             interim: {
-                google: {
-                    id: number;
-                    email: string;
-                };
+                id: string;
+                email?: string;
+                provider: "google" | "steam" | "github";
             };
         }>;
     }

@@ -12,7 +12,7 @@
 
 import {IsString} from "class-validator";
 
-export class GoogleRedirectQuery {
+export class OAuth2RedirectQuery {
     @IsString()
     code: string;
 }

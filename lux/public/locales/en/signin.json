@@ -1,0 +1,19 @@
+{
+    "error": {
+        "emailOrUsername": {
+            "required": "Email or username is required"
+        },
+        "password": {
+            "required": "Password is required"
+        }
+    },
+    "title": "Log in to \n<0>your account.</0>",
+    "reference": {
+        "signup": "Don't have an account yet? <0>Go. Create. One</0>"
+    },
+    "field": {
+        "email-or-username": "Email or username",
+        "password": "Password"
+    },
+    "signin": "Join!"
+}

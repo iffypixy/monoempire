@@ -17,6 +17,7 @@ model User {
   password String? @db.VarChar(256)
   createdAt DateTime @default(now())
 
+  authProviders AuthProvider[]
   matchPlayers MatchPlayer[]
 
   @@index(username)
@@ -26,6 +27,20 @@ enum UserRole {
   USER
   ELDER
   ADMIN
+}
+
+model AuthProvider {
+  id String @id @default(uuid())
+  name String @unique @db.VarChar(64)
+  uid String @db.VarChar(512)
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+}
+
+enum AuthProviderName {
+  GITHUB
+  STEAM
+  GOOGLE
 }
 
 model Match {

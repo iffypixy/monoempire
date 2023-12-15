@@ -10,7 +10,8 @@ export default {
             },
             boxShadow: flatten({
                 even: {
-                    lg: "0 0 50px -1px rgb(0 0 0 / 0.1)",
+                    md: "0 0 25px rgb(0 0 0 / 0.1)",
+                    lg: "0 0 50px rgb(0 0 0 / 0.1)",
                 },
             }),
             keyframes: {
@@ -48,13 +49,16 @@ export default {
                     DEFAULT: "var(--accent-color)",
                     contrast: "var(--accent-color-contrast)",
                 },
+                success: {
+                    DEFAULT: "var(--success-color)",
+                },
                 error: {
                     DEFAULT: "var(--error-color)",
                 },
                 paper: {
                     primary: "var(--paper-primary)",
                     secondary: "var(--paper-secondary)",
-                    contrast: "var(--paper-contrast)",
+                    contrast: "rgb(var(--paper-contrast) / <alpha-value>)",
                 },
             },
         },

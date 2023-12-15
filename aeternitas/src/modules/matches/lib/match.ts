@@ -8,7 +8,21 @@ import {pile} from "./pile";
 
 const ID_LENGTH = 13;
 
-export type MatchStateType = "waiting-for-action";
+interface MatchPlayer {}
+
+interface MatchSpectator {}
+
+type ChanceCard = "";
+type EmpireCard = "";
+
+type StateType = "";
+
+interface MatchPlayer {
+    id: string;
+    user: User;
+    tower: Card[];
+    empireCards: EmpireCard[];
+}
 
 export interface IMatch {
     id: string;
@@ -16,150 +30,168 @@ export interface IMatch {
     players: MatchPlayer[];
     spectators: MatchSpectator[];
     type: "competitive" | "public";
-
     piles: {
-        draw: Card[];
-        discard: Card[];
+        chance: ChanceCard[];
+        empire: EmpireCard[];
     };
-
-    context: {
-        isReversed: boolean;
-        isNoped: boolean;
-        attacks: number;
-    };
-
     state: {
-        type: MatchStateType;
-        start: number;
-        payload?: any;
+        type: StateType;
+        at: number;
     };
 }
 
-interface MatchPlayer {
-    id: string;
-    username: string;
-    avatar: string;
-    hasLost: boolean;
-    user: Nullable<User>;
-    hand: {
-        cards: Card[];
-        marked: string[];
-    };
-}
+// export type MatchStateType = "waiting-for-action";
 
-interface MatchSpectator {
-    id: string;
-    username: string;
-    avatar: string;
-    user: Nullable<User>;
-}
+// export interface IMatch {
+//     id: string;
+//     turn: number;
+//     players: MatchPlayer[];
+//     spectators: MatchSpectator[];
+//     type: "competitive" | "public";
 
-type MatchType = "competitive" | "public";
+//     piles: {
+//         draw: Card[];
+//         discard: Card[];
+//     };
 
-interface MatchInitOptions {
-    type: MatchType;
-    players: {
-        id: string;
-        username: string;
-        avatar: string;
-        user: Nullable<User>;
-    }[];
-}
+//     context: {
+//         isReversed: boolean;
+//         isNoped: boolean;
+//         attacks: number;
+//     };
 
-export class Match {
-    id: IMatch["id"];
-    turn: IMatch["turn"];
-    type: IMatch["type"];
-    players: IMatch["players"];
-    spectators: IMatch["spectators"];
-    piles: IMatch["piles"];
-    context: IMatch["context"];
-    state: IMatch["state"];
+//     state: {
+//         type: MatchStateType;
+//         start: number;
+//         payload?: any;
+//     };
+// }
 
-    constructor(match: IMatch) {
-        this.id = match.id;
-        this.players = match.players;
-        this.spectators = match.spectators;
-        this.piles = match.piles;
-        this.turn = match.turn;
-        this.context = match.context;
-        this.state = match.state;
-    }
+// interface MatchPlayer {
+//     id: string;
+//     username: string;
+//     avatar: string;
+//     hasLost: boolean;
+//     user: Nullable<User>;
+//     hand: {
+//         cards: Card[];
+//         marked: string[];
+//     };
+// }
 
-    static hydrate(match: IMatch) {
-        return new Match(match);
-    }
+// interface MatchSpectator {
+//     id: string;
+//     username: string;
+//     avatar: string;
+//     user: Nullable<User>;
+// }
 
-    static init(options: MatchInitOptions) {
-        const {deck, hands} = pile.generate({players: options.players.length});
+// type MatchType = "competitive" | "public";
 
-        return new Match({
-            id: nanoid(ID_LENGTH),
-            turn: 0,
-            type: options.type,
-            spectators: [],
-            context: {
-                attacks: 0,
-                isNoped: false,
-                isReversed: false,
-            },
-            state: {
-                type: "waiting-for-action",
-                start: Date.now(),
-            },
-            piles: {
-                draw: deck,
-                discard: [],
-            },
-            players: options.players.map((user, idx) => ({
-                ...user,
-                hasLost: false,
-                hand: {
-                    cards: hands[idx],
-                    marked: [],
-                },
-            })),
-        });
-    }
+// interface MatchInitOptions {
+//     type: MatchType;
+//     players: {
+//         id: string;
+//         username: string;
+//         avatar: string;
+//         user: Nullable<User>;
+//     }[];
+// }
 
-    nextTurn() {
-        if (this.context.isReversed) {
-            const previous = this.players[this.turn - 1];
+// export class Match {
+//     id: IMatch["id"];
+//     turn: IMatch["turn"];
+//     type: IMatch["type"];
+//     players: IMatch["players"];
+//     spectators: IMatch["spectators"];
+//     piles: IMatch["piles"];
+//     context: IMatch["context"];
+//     state: IMatch["state"];
 
-            if (previous) this.turn--;
-            else this.turn = this.players.length - 1;
-        } else {
-            const next = this.players[this.turn + 1];
+//     constructor(match: IMatch) {
+//         this.id = match.id;
+//         this.players = match.players;
+//         this.spectators = match.spectators;
+//         this.piles = match.piles;
+//         this.turn = match.turn;
+//         this.context = match.context;
+//         this.state = match.state;
+//     }
 
-            if (next) this.turn++;
-            else this.turn = 0;
-        }
-    }
+//     static hydrate(match: IMatch) {
+//         return new Match(match);
+//     }
 
-    updateTurn() {
-        if (this.context.isReversed) {
-            const previous = this.players[this.turn - 1];
+//     static init(options: MatchInitOptions) {
+//         const {deck, hands} = pile.generate({players: options.players.length});
 
-            if (previous) this.turn--;
-            else this.turn = this.players.length - 1;
-        } else {
-            const next = this.players[this.turn];
+//         return new Match({
+//             id: nanoid(ID_LENGTH),
+//             turn: 0,
+//             type: options.type,
+//             spectators: [],
+//             context: {
+//                 attacks: 0,
+//                 isNoped: false,
+//                 isReversed: false,
+//             },
+//             state: {
+//                 type: "waiting-for-action",
+//                 start: Date.now(),
+//             },
+//             piles: {
+//                 draw: deck,
+//                 discard: [],
+//             },
+//             players: options.players.map((user, idx) => ({
+//                 ...user,
+//                 hasLost: false,
+//                 hand: {
+//                     cards: hands[idx],
+//                     marked: [],
+//                 },
+//             })),
+//         });
+//     }
 
-            if (!next) this.turn = 0;
-        }
-    }
+//     nextTurn() {
+//         if (this.context.isReversed) {
+//             const previous = this.players[this.turn - 1];
 
-    get nextPlayer() {
-        if (this.context.isReversed) {
-            const previous = this.players[this.turn - 1];
+//             if (previous) this.turn--;
+//             else this.turn = this.players.length - 1;
+//         } else {
+//             const next = this.players[this.turn + 1];
 
-            if (previous) return previous;
-            else return this.players[this.players.length - 1];
-        } else {
-            const next = this.players[this.turn + 1];
+//             if (next) this.turn++;
+//             else this.turn = 0;
+//         }
+//     }
 
-            if (next) return next;
-            else return this.players[0];
-        }
-    }
-}
+//     updateTurn() {
+//         if (this.context.isReversed) {
+//             const previous = this.players[this.turn - 1];
+
+//             if (previous) this.turn--;
+//             else this.turn = this.players.length - 1;
+//         } else {
+//             const next = this.players[this.turn];
+
+//             if (!next) this.turn = 0;
+//         }
+//     }
+
+//     get nextPlayer() {
+//         if (this.context.isReversed) {
+//             const previous = this.players[this.turn - 1];
+
+//             if (previous) return previous;
+//             else return this.players[this.players.length - 1];
+//         } else {
+//             const next = this.players[this.turn + 1];
+
+//             if (next) return next;
+//             else return this.players[0];
+//         }
+//     }
+// }

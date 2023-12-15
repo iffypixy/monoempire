@@ -1,10 +1,10 @@
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 
-import {selectors} from "./model";
+import {model} from "./model";
 
 export const ThemeChangeListener: React.FCWC = ({children}) => {
-    const theme = useSelector(selectors.theme);
+    const theme = useSelector(model.selectors.theme);
 
     useEffect(() => {
         const html = document.documentElement;

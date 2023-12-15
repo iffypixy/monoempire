@@ -1,8 +1,6 @@
 export const config = () => {
     const env = process.env;
 
-    const registration = (path: string) => `${env.CLIENT_ORIGIN}${path}`;
-
     return {
         oauth2: {
             google: {
@@ -16,12 +14,21 @@ export const config = () => {
                 token: env.GOOGLE_TOKEN,
                 scope: env.GOOGLE_SCOPE,
             },
+            github: {
+                client: {
+                    id: env.GITHUB_CLIENT_ID,
+                    secret: env.GITHUB_CLIENT_SECRET,
+                },
+                redirectURI: env.GITHUB_REDIRECT_URI,
+                credentialsURI: env.GITHUB_CREDENTIALS_URI,
+                authorizationURI: env.GITHUB_AUTHORIZATION_URI,
+                token: env.GITHUB_TOKEN,
+                scope: env.GITHUB_SCOPE,
+            },
         },
         client: {
             origin: env.CLIENT_ORIGIN,
-            registration: {
-                google: registration(env.CLIENT_GOOGLE_REGISTRATION),
-            },
+            registration: `${env.CLIENT_ORIGIN}${env.CLIENT_REGISTRATION}`,
         },
         redis: {
             host: env.REDIS_HOST,

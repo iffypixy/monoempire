@@ -1,3 +1,5 @@
-export * from "./store";
-export * as actions from "./actions";
-export * as selectors from "./selectors";
+import {store} from "./store";
+import * as actions from "./actions";
+import * as selectors from "./selectors";
+
+export const model = {store, actions, selectors};
