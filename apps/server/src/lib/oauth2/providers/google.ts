@@ -14,14 +14,14 @@ interface OAuth2GoogleCredentials {
 export class OAuth2GoogleService extends OAuth2Provider<OAuth2GoogleCredentials> {
     constructor(private readonly config: ConfigService) {
         super({
-            authorization: config.get("oauth2.google.authorizationURI")!,
+            authorization: config.get("oauth2.google.authorizationUri")!,
             token: config.get("oauth2.google.token")!,
             scope: config.get("oauth2.google.scope")!,
             client_id: config.get("oauth2.google.client.id")!,
             client_secret: config.get("oauth2.google.client.secret")!,
-            redirect_uri: config.get("oauth2.google.redirectURI")!,
+            redirect_uri: config.get("oauth2.google.redirectUri")!,
             loadCredentials: async (options) => {
-                const url = config.get("oauth2.google.credentialsURI")!;
+                const url = config.get("oauth2.google.credentialsUri")!;
 
                 const res = await axios.get<OAuth2GoogleCredentials>(url, {
                     params: {
