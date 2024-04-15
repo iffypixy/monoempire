@@ -3,12 +3,12 @@ import {Module} from "@nestjs/common";
 import {
     CompetitiveMatchesGateway,
     PublicMatchesGateway,
-    MatchesCoreGateway,
+    MatchesGateway,
 } from "./gateways";
 
 @Module({
     providers: [
-        MatchesCoreGateway,
+        MatchesGateway,
         CompetitiveMatchesGateway,
         PublicMatchesGateway,
     ],
