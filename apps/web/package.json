@@ -33,6 +33,7 @@
         "zod": "^3.22.2"
     },
     "devDependencies": {
+        "@tanstack/router-vite-plugin": "^1.26.21",
         "@types/react": "^18.0.37",
         "@types/react-dom": "^18.0.11",
         "@typescript-eslint/eslint-plugin": "^5.59.0",
