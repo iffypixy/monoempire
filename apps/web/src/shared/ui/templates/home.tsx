@@ -13,7 +13,7 @@ import {FancyText} from "../molecules";
 import {Fullscreen} from "./fullscreen";
 
 const styles = {
-    item: cva("h-16 pt-4 px-4 relative rounded-t-full", {
+    item: cva("flex h-16 pt-4 px-4 relative rounded-t-full", {
         variants: {
             active: {
                 true: "bg-paper-primary",
@@ -21,7 +21,7 @@ const styles = {
             },
         },
     }),
-    icon: cva("w-8 h-8 text-primary cursor-pointer", {
+    icon: cva("w-8 h-8 text-primary cursor-pointer m-auto", {
         variants: {
             active: {
                 true: "",
@@ -51,11 +51,12 @@ export const HomeTemplate: React.FC<HomeTemplateProps> = ({children}) => {
     return (
         <Fullscreen className="flex flex-col bg-paper-secondary pb-16 px-16">
             <div className="h-24 flex flex-row items-center justify-between">
-                <FancyText className="text-lg">Ɛ:kittens</FancyText>
+                <FancyText className="text-lg">{"{mono:empire}"}</FancyText>
 
                 <nav className="flex flex-row space-x-8 items-center mt-auto">
                     {nav.map(({Icon, location: loc}, idx) => (
                         <div
+                            key={idx}
                             className={styles.item({active: location === loc})}
                         >
                             {location === loc && (
@@ -64,8 +65,8 @@ export const HomeTemplate: React.FC<HomeTemplateProps> = ({children}) => {
                                     <div className="absolute w-8 h-8 bottom-0 -right-8 overflow-hidden before:absolute before:bottom-0 before:w-[200%] before:h-[200%] before:rounded-full before:shadow-[10px_10px_5px_100px_blue] before:shadow-paper-primary" />
                                 </>
                             )}
+
                             <Icon
-                                key={idx}
                                 onClick={() => navigate(loc)}
                                 className={cx(
                                     styles.icon({active: location === loc}),
