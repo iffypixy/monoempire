@@ -47,9 +47,6 @@ dependencies:
   react-i18next:
     specifier: ^13.0.1
     version: 13.0.1(i18next@23.2.6)(react-dom@18.2.0)(react@18.2.0)
-  react-icons:
-    specifier: ^4.10.1
-    version: 4.10.1(react@18.2.0)
   socket.io-client:
     specifier: ^4.7.1
     version: 4.7.1
@@ -4066,14 +4063,6 @@ packages:
       i18next: 23.2.6
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /react-icons@4.10.1(react@18.2.0):
-    resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
-    peerDependencies:
-      react: '*'
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /react-refresh@0.14.0:
