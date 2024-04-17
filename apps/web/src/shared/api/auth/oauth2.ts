@@ -1,42 +1,36 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-
 import {Credentials} from "@features/auth";
+import {Dto, request} from "@shared/lib/request";
 
-type OAuth2Provider = "google" | "github" | "steam";
+export type OAuth2Provider = "google" | "github" | "steam";
 
-interface GetInterimCredentailsResponse {
-    id: string;
-    email?: string;
-    provider: OAuth2Provider;
-}
+export type GetInterimCredentialsDto = Dto<
+    void,
+    {
+        id: string;
+        email?: string;
+        provider: OAuth2Provider;
+    }
+>;
 
-interface OAuth2SignUpBody {
-    email?: string;
-    username: string;
-}
+export const getInterimCredentials = () =>
+    request<GetInterimCredentialsDto["res"]>({
+        url: "/api/auth/oauth2/interim",
+        method: "GET",
+    });
 
-interface OAuth2SignUpResponse {
-    credentials: Credentials;
-}
+export type OAuth2SignUpDto = Dto<
+    {
+        email?: string;
+        username: string;
+    },
+    {
+        credentials: Credentials;
+    }
+>;
 
-export const oauth2 = createApi({
-    reducerPath: "authApi/oauth2",
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${import.meta.env.VITE_BACKEND_URL}/api/auth/oauth2`,
-        credentials: "include",
-    }),
-    endpoints: (build) => ({
-        getInterimCredentials: build.query<GetInterimCredentailsResponse, void>(
-            {
-                query: () => "/interim",
-            },
-        ),
-        signUp: build.mutation<OAuth2SignUpResponse, OAuth2SignUpBody>({
-            query: (body) => ({
-                url: "/register",
-                method: "POST",
-                body,
-            }),
-        }),
-    }),
-});
+export const signUp = (req: OAuth2SignUpDto["req"]) =>
+    request<OAuth2SignUpDto["res"]>({
+        url: "/api/auth/oauth2/register",
+        method: "POST",
+        data: req,
+    });

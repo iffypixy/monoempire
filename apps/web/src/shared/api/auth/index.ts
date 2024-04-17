@@ -1,4 +1,4 @@
-import {local} from "./local";
-import {oauth2} from "./oauth2";
+import * as local from "./local";
+import * as oauth2 from "./oauth2";
 
-export const authApi = {local, oauth2};
+export {local, oauth2};
