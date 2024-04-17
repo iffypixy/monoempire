@@ -3,9 +3,9 @@ import {Switch, Route} from "wouter";
 import {PrivateRoute, PublicOnlyRoute} from "@shared/lib/routing";
 
 import {HomePage} from "./home";
-import {SignUpPage} from "./signup";
-import {SignInPage} from "./signin";
-import {OAuth2SignUpPage} from "./signup/oauth2";
+import {SignUpPage} from "./sign-up";
+import {SignInPage} from "./sign-in";
+import {OAuth2SignUpPage} from "./sign-up/oauth2";
 import {PreferencesPage} from "./preferences";
 import {ProfilePage} from "./profile";
 import {LeaderboardPage} from "./leaderboard";
