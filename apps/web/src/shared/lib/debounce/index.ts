@@ -1,17 +1,40 @@
-import {Callback} from "../types";
+import {useCallback, useEffect, useRef, useState} from "react";
 
-export const debounce = (cb: Callback, delay: number) => {
-    let timeout: number;
+import {Callback, Nullable} from "../types";
 
-    return (...args: any[]) => {
-        if (timeout) {
-            clearTimeout(timeout);
-        }
+export const useDebouncedValue = <T>(value: T, delay: number) => {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
-        timeout = setTimeout(() => {
-            cb(...args);
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setDebouncedValue(value);
         }, delay);
-    };
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
 };
 
-export const TYPING_DEBOUCE_DELAY = 300;
+export const useDebouncedCallback = (cb: Callback, delay: number) => {
+    const timeoutRef = useRef<Nullable<number>>(null);
+
+    const debounceCb = useCallback(
+        (...args: unknown[]) => {
+            const timeoutId = timeoutRef.current;
+
+            if (timeoutId) clearTimeout(timeoutId);
+
+            timeoutRef.current = setTimeout(() => cb(args), delay);
+        },
+        [cb, delay],
+    );
+
+    const cancelDebouncedCb = useCallback(() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    }, []);
+
+    return [debounceCb, cancelDebouncedCb];
+};
