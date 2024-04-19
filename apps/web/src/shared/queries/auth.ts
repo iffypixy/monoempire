@@ -72,6 +72,7 @@ export const useCredentials = () => {
 
             return res.data;
         },
+        retry: false,
     });
 
     return {credentials: data, ...query};
