@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {HiOutlineSwatch} from "react-icons/hi2";
 import {VariantProps, cva, cx} from "class-variance-authority";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {useTranslation} from "react-i18next";
@@ -93,7 +92,7 @@ export const ThemeDropdown: React.FC<ThemeDropdownProps> = ({
         >
             <DropdownMenu.Trigger asChild className="outline-none">
                 <button {...props}>
-                    <HiOutlineSwatch
+                    <Icons.Swatch
                         className={cx(
                             styles.button({
                                 isActive: isOpen,
@@ -115,7 +114,7 @@ export const ThemeDropdown: React.FC<ThemeDropdownProps> = ({
                     <DropdownMenu.Arrow className="fill-paper-secondary w-6 h-3" />
 
                     <div className="grid grid-cols-1 gap-y-4 bg-paper-secondary rounded-lg p-5">
-                        {themes.map((theme) => {
+                        {themes.values.map((theme) => {
                             const {icon: Icon} = contexts[theme];
 
                             return (

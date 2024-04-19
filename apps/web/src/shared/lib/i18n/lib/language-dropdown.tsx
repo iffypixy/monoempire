@@ -1,13 +1,12 @@
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {HiLanguage} from "react-icons/hi2";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {cva, VariantProps, cx} from "class-variance-authority";
 
 import {Icon} from "@shared/lib/types";
 import {Icons} from "@shared/ui/icons";
 
-import {languages, Language} from "./config";
+import {languages, type Language} from "../config";
 
 const context: Record<
     Language,
@@ -116,7 +115,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
         >
             <DropdownMenu.Trigger asChild className="outline-none">
                 <button {...props}>
-                    <HiLanguage
+                    <Icons.Language
                         className={cx(
                             styles.button({
                                 isActive: isOpen,
