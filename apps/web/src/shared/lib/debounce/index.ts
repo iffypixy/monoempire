@@ -36,5 +36,5 @@ export const useDebouncedCallback = (cb: Callback, delay: number) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
     }, []);
 
-    return [debounceCb, cancelDebouncedCb];
+    return [debounceCb, cancelDebouncedCb] as const;
 };
