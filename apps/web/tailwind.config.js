@@ -10,7 +10,8 @@ export default {
             },
             boxShadow: flatten({
                 even: {
-                    md: "0 0 25px rgb(0 0 0 / 0.1)",
+                    sm: "0 0 10px rgb(0 0 0 / 0.1)",
+                    md: "0 0 20px rgb(0 0 0 / 0.1)",
                     lg: "0 0 50px rgb(0 0 0 / 0.1)",
                 },
             }),
@@ -38,15 +39,15 @@ export default {
             },
             colors: {
                 primary: {
-                    DEFAULT: "var(--primary-color)",
+                    DEFAULT: "rgb(var(--primary-color) / <alpha-value>)",
                     contrast: "var(--primary-color-contrast)",
                 },
                 secondary: {
-                    DEFAULT: "var(--secondary-color)",
+                    DEFAULT: "rgb(var(--secondary-color) / <alpha-value>)",
                     contrast: "var(--secondary-color-contrast)",
                 },
                 accent: {
-                    DEFAULT: "var(--accent-color)",
+                    DEFAULT: "rgb(var(--accent-color) / <alpha-value>)",
                     contrast: "var(--accent-color-contrast)",
                 },
                 success: {
@@ -80,7 +81,6 @@ export default {
             },
         },
     },
-
     plugins: [],
 };
 
