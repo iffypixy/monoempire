@@ -1,4 +1,4 @@
-import {ThemeChangeListener} from "@shared/lib/theming";
+import {ThemeChangeListener} from "@shared/lib/themes";
 import {CredentialsLoader} from "@features/auth";
 
 import {Routes} from "./pages";
