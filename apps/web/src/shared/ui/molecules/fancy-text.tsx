@@ -7,7 +7,7 @@ const styles = {
         "bg-clip-text bg-gradient-to-tr from-primary via-accent to-secondary from-0% via-50% to-100% bg-[500%_auto] animate-text-shine",
     ),
     letters: cx(
-        "text-9xl md:text-8xl sm:text-7xl uppercase",
+        "text-8xl md:text-8xl sm:text-7xl uppercase",
         "flex items-center",
     ),
 };
