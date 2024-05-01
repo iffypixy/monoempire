@@ -1,5 +1,5 @@
 import {Center, Fullscreen, H1} from "@shared/ui";
-import {authApi} from "@shared/api/auth";
+import {useCredentials} from "@shared/queries/auth";
 
 interface CredentialsLoaderProps {
     children: React.ReactNode;
@@ -8,7 +8,7 @@ interface CredentialsLoaderProps {
 export const CredentialsLoader: React.FC<CredentialsLoaderProps> = ({
     children,
 }) => {
-    const {isLoading} = authApi.local.useGetCredentialsQuery();
+    const {isLoading} = useCredentials();
 
     if (isLoading)
         return (
