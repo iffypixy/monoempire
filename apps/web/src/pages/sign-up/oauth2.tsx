@@ -2,14 +2,17 @@ import React from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import z from "zod";
-import {BiSolidError} from "react-icons/bi";
-import {BsCheckLg} from "react-icons/bs";
 import {Trans, useTranslation} from "react-i18next";
 
 import {regex} from "@shared/lib/regex";
-import {authApi} from "@shared/api/auth";
 import {Button, Center, Fullscreen, H1, Input, Icons} from "@shared/ui";
-import {debounce, TYPING_DEBOUCE_DELAY} from "@shared/lib/debounce";
+import {useDebouncedCallback} from "@shared/lib/debounce";
+import {
+    useInterimCredentials,
+    useOAuth2SignUp,
+    useVerifyEmail,
+    useVerifyUsername,
+} from "@shared/queries/auth";
 
 interface OAuth2SignUpForm {
     email: string;
@@ -19,21 +22,22 @@ interface OAuth2SignUpForm {
 export const OAuth2SignUpPage: React.FC = () => {
     const {t} = useTranslation("signup");
 
-    const {data: credentials, isLoading} =
-        authApi.oauth2.useGetInterimCredentialsQuery();
+    const {interimCredentials: credentials, isLoading} =
+        useInterimCredentials();
 
-    const [signUp, {isLoading: isSignUpLoading}] =
-        authApi.oauth2.useSignUpMutation();
+    const {signUp, isPending: isSignUpPending} = useOAuth2SignUp();
 
-    const [
+    const {
         verifyEmail,
-        {data: emailVerification, isLoading: isEmailVerificationLoading},
-    ] = authApi.local.useVerifyEmailMutation();
+        isPending: isVerifyEmailPending,
+        data: emailVerification,
+    } = useVerifyEmail();
 
-    const [
+    const {
         verifyUsername,
-        {data: usernameVerification, isLoading: isUsernameVerificationLoading},
-    ] = authApi.local.useVerifyUsernameMutation();
+        isPending: isVerifyUsernamePending,
+        data: usernameVerification,
+    } = useVerifyUsername();
 
     const schema = z.object({
         email: z.string().email(t("error.email.validity")),
@@ -66,8 +70,8 @@ export const OAuth2SignUpPage: React.FC = () => {
 
     const icons = {
         loader: <Icons.Loader className="w-6 h-6 text-primary" />,
-        error: <BiSolidError className="w-6 h-6 fill-error" />,
-        success: <BsCheckLg className="w-6 h-6 fill-primary" />,
+        error: <Icons.Error className="w-6 h-6 fill-error" />,
+        success: <Icons.Check className="w-6 h-6 fill-primary" />,
     };
 
     const isFieldValid = {
@@ -81,14 +85,14 @@ export const OAuth2SignUpPage: React.FC = () => {
     };
 
     const suffix = {
-        email: isEmailVerificationLoading
+        email: isVerifyEmailPending
             ? icons.loader
             : isAvailable.email === false
             ? icons.error
             : isFieldValid.email
             ? icons.success
             : null,
-        username: isUsernameVerificationLoading
+        username: isVerifyUsernamePending
             ? icons.loader
             : isAvailable.username === false
             ? icons.error
@@ -108,28 +112,22 @@ export const OAuth2SignUpPage: React.FC = () => {
                 : formErrors.username?.message,
     };
 
-    const handleFormSubmit = handleSubmit((form) => {
-        signUp(form);
-    });
-
-    const handleEmailChange = React.useMemo(
-        () =>
-            debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-                verifyEmail({
-                    email: event.target.value,
-                });
-            }, TYPING_DEBOUCE_DELAY),
-        [verifyEmail],
+    const [handleEmailChange] = useDebouncedCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            verifyEmail({
+                email: event.target.value,
+            });
+        },
+        300,
     );
 
-    const handleUsernameChange = React.useMemo(
-        () =>
-            debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-                verifyUsername({
-                    username: event.target.value,
-                });
-            }, TYPING_DEBOUCE_DELAY),
-        [verifyUsername],
+    const [handleUsernameChange] = useDebouncedCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            verifyUsername({
+                username: event.target.value,
+            });
+        },
+        300,
     );
 
     const isSubmissionDisabled =
@@ -147,12 +145,17 @@ export const OAuth2SignUpPage: React.FC = () => {
                             ns="signup"
                             values={{provider: credentials?.provider}}
                             components={[
-                                <span className="text-accent underline italic" />,
+                                <span className="text-accent underline italic capitalize" />,
                             ]}
                         />
                     </H1>
 
-                    <form className="flex flex-col space-y-6">
+                    <form
+                        onSubmit={handleSubmit((form) => {
+                            signUp(form);
+                        })}
+                        className="flex flex-col space-y-6"
+                    >
                         <Input
                             type="email"
                             placeholder="example@domain.com"
@@ -178,11 +181,10 @@ export const OAuth2SignUpPage: React.FC = () => {
 
                         <Button
                             size="large"
-                            onClick={handleFormSubmit}
-                            loading={isSignUpLoading}
+                            loading={isSignUpPending}
                             disabled={isSubmissionDisabled}
                         >
-                            {isSignUpLoading
+                            {isSignUpPending
                                 ? t("oauth2.loading")
                                 : t("oauth2.signup")}
                         </Button>

@@ -3,13 +3,18 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import z from "zod";
 import {Trans, useTranslation} from "react-i18next";
-import {FcGoogle} from "react-icons/fc";
-import {BsGithub, BsSteam} from "react-icons/bs";
 import {Link} from "wouter";
 
-import {Button, Center, FullscreenWithNavbar, H1, Input} from "@shared/ui";
-import {authApi} from "@shared/api/auth";
+import {
+    Button,
+    Center,
+    FullscreenWithNavbar,
+    H1,
+    Input,
+    Icons,
+} from "@shared/ui";
 import {oauth2} from "@features/auth";
+import {useSignIn} from "@shared/queries/auth";
 
 interface SignInForm {
     emailOrUsername: string;
@@ -19,8 +24,7 @@ interface SignInForm {
 export const SignInPage: React.FC = () => {
     const {t} = useTranslation("signin");
 
-    const [signIn, {isLoading: isSignInLoading}] =
-        authApi.local.useSignInMutation();
+    const {signIn, isPending: isSignInPending} = useSignIn();
 
     const schema = z.object({
         emailOrUsername: z.string().min(1, t("error.emailOrUsername.required")),
@@ -89,7 +93,7 @@ export const SignInPage: React.FC = () => {
                                 color="accent"
                                 size="large"
                                 variant="contained"
-                                loading={isSignInLoading}
+                                loading={isSignInPending}
                                 disabled={!isValid}
                             >
                                 {t("signin")}
@@ -100,19 +104,19 @@ export const SignInPage: React.FC = () => {
                             <div className="flex space-x-6 justify-center">
                                 <a href={oauth2.authorization.google}>
                                     <div className="bg-[#EEEEEE] px-8 py-4 cursor-pointer rounded">
-                                        <FcGoogle className="w-8 h-8" />
+                                        <Icons.Social.Google className="w-8 h-8" />
                                     </div>
                                 </a>
 
                                 <a href={oauth2.authorization.github}>
                                     <div className="bg-[#101010] px-8 py-4 cursor-pointer rounded">
-                                        <BsGithub className="w-8 h-8" />
+                                        <Icons.Social.Github className="w-8 h-8 fill-[#FFFFFF]" />
                                     </div>
                                 </a>
 
                                 <a href={oauth2.authorization.steam}>
                                     <div className="bg-[#2B6C9A] px-8 py-4 cursor-pointer rounded">
-                                        <BsSteam className="w-8 h-8" />
+                                        <Icons.Social.Steam className="w-8 h-8 fill-[#FFFFFF]" />
                                     </div>
                                 </a>
                             </div>

@@ -3,9 +3,6 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import z from "zod";
 import {Trans, useTranslation} from "react-i18next";
-import {FcGoogle} from "react-icons/fc";
-import {BsCheckLg, BsGithub, BsSteam} from "react-icons/bs";
-import {BiSolidError} from "react-icons/bi";
 import {Link} from "wouter";
 
 import {oauth2} from "@features/auth";
@@ -17,9 +14,13 @@ import {
     Icons,
     Input,
 } from "@shared/ui";
-import {authApi} from "@shared/api/auth";
 import {regex} from "@shared/lib/regex";
-import {debounce, TYPING_DEBOUCE_DELAY} from "@shared/lib/debounce";
+import {useDebouncedCallback} from "@shared/lib/debounce";
+import {
+    useSignUp,
+    useVerifyEmail,
+    useVerifyUsername,
+} from "@shared/queries/auth";
 
 interface SignUpForm {
     email: string;
@@ -30,18 +31,19 @@ interface SignUpForm {
 export const SignUpPage: React.FC = () => {
     const {t} = useTranslation("signup");
 
-    const [
+    const {
         verifyEmail,
-        {data: emailVerification, isLoading: isEmailVerificationLoading},
-    ] = authApi.local.useVerifyEmailMutation();
+        data: emailVerification,
+        isPending: isVerifyEmailPending,
+    } = useVerifyEmail();
 
-    const [
+    const {
         verifyUsername,
-        {data: usernameVerification, isLoading: isUsernameVerificationLoading},
-    ] = authApi.local.useVerifyUsernameMutation();
+        data: usernameVerification,
+        isPending: isVerifyUsernamePending,
+    } = useVerifyUsername();
 
-    const [signUp, {isLoading: isSignUpLoading}] =
-        authApi.local.useSignUpMutation();
+    const {signUp, isPending: isSignUpPending} = useSignUp();
 
     const schema = z.object({
         email: z.string().email(t("error.email.validity")),
@@ -87,8 +89,8 @@ export const SignUpPage: React.FC = () => {
 
     const icons = {
         loader: <Icons.Loader className="w-6 h-6 text-primary" />,
-        error: <BiSolidError className="w-6 h-6 fill-error" />,
-        success: <BsCheckLg className="w-6 h-6 fill-primary" />,
+        error: <Icons.Error className="w-6 h-6 fill-error" />,
+        success: <Icons.Check className="w-6 h-6 fill-primary" />,
     };
 
     const isFieldValid = {
@@ -101,14 +103,14 @@ export const SignUpPage: React.FC = () => {
     };
 
     const suffix = {
-        email: isEmailVerificationLoading
+        email: isVerifyEmailPending
             ? icons.loader
             : isAvailable.email === false
             ? icons.error
             : isFieldValid.email
             ? icons.success
             : null,
-        username: isUsernameVerificationLoading
+        username: isVerifyUsernamePending
             ? icons.loader
             : isAvailable.username === false
             ? icons.error
@@ -133,24 +135,22 @@ export const SignUpPage: React.FC = () => {
         signUp(form);
     });
 
-    const handleEmailChange = React.useMemo(
-        () =>
-            debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-                verifyEmail({
-                    email: event.target.value,
-                });
-            }, TYPING_DEBOUCE_DELAY),
-        [verifyEmail],
+    const [handleEmailChange] = useDebouncedCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            verifyEmail({
+                email: event.target.value,
+            });
+        },
+        300,
     );
 
-    const handleUsernameChange = React.useMemo(
-        () =>
-            debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-                verifyUsername({
-                    username: event.target.value,
-                });
-            }, TYPING_DEBOUCE_DELAY),
-        [verifyUsername],
+    const [handleUsernameChange] = useDebouncedCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            verifyUsername({
+                username: event.target.value,
+            });
+        },
+        300,
     );
 
     const isSubmissionDisabled =
@@ -216,7 +216,7 @@ export const SignUpPage: React.FC = () => {
                                 color="accent"
                                 size="large"
                                 variant="contained"
-                                loading={isSignUpLoading}
+                                loading={isSignUpPending}
                                 disabled={isSubmissionDisabled}
                             >
                                 {t("signup")}
@@ -227,19 +227,19 @@ export const SignUpPage: React.FC = () => {
                             <div className="flex space-x-6 justify-center">
                                 <a href={oauth2.authorization.google}>
                                     <div className="bg-[#EEEEEE] px-8 py-4 cursor-pointer rounded">
-                                        <FcGoogle className="w-8 h-8" />
+                                        <Icons.Social.Google className="w-8 h-8" />
                                     </div>
                                 </a>
 
                                 <a href={oauth2.authorization.github}>
                                     <div className="bg-[#101010] px-8 py-4 cursor-pointer rounded">
-                                        <BsGithub className="w-8 h-8" />
+                                        <Icons.Social.Github className="w-8 h-8 fill-[#FFFFFF]" />
                                     </div>
                                 </a>
 
                                 <a href={oauth2.authorization.steam}>
                                     <div className="bg-[#2B6C9A] px-8 py-4 cursor-pointer rounded">
-                                        <BsSteam className="w-8 h-8" />
+                                        <Icons.Social.Steam className="w-8 h-8 fill-[#FFFFFF]" />
                                     </div>
                                 </a>
                             </div>

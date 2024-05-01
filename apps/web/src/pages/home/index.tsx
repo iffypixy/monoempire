@@ -1,12 +1,10 @@
-import {useSelector} from "react-redux";
-
-import {authModel} from "@features/auth";
+import {useAuthStore} from "@features/auth";
 
 import {AuthenticatedHomePage} from "./authenticated";
 import {GuestHomePage} from "./guest";
 
 export const HomePage: React.FC = () => {
-    const isAuthenticated = useSelector(authModel.selectors.isAuthenticated);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     if (isAuthenticated) return <AuthenticatedHomePage />;
 
