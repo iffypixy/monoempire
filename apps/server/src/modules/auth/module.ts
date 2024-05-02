@@ -12,6 +12,7 @@ import {
     GoogleAuthController,
     GithubAuthController,
     OAuth2Controller,
+    SteamAuthController,
 } from "./controllers";
 import {LoadUser} from "./middlewares";
 
@@ -22,6 +23,7 @@ import {LoadUser} from "./middlewares";
         GoogleAuthController,
         GithubAuthController,
         OAuth2Controller,
+        SteamAuthController,
     ],
 })
 export class AuthModule implements NestModule {
