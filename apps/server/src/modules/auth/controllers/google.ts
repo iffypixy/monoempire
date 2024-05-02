@@ -18,7 +18,7 @@ export class GoogleAuthController {
 
     @Get("/")
     redirectToAuthorization(@Res() res: Response) {
-        res.redirect(this.oauth2.google.authorizationURL);
+        res.redirect(this.oauth2.google.authorizationUrl);
     }
 
     @Get("redirect")

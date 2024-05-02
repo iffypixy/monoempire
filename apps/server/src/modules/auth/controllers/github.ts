@@ -18,7 +18,7 @@ export class GithubAuthController {
 
     @Get("/")
     redirectToAuthorization(@Res() res: Response) {
-        res.redirect(this.oauth2.github.authorizationURL);
+        res.redirect(this.oauth2.github.authorizationUrl);
     }
 
     @Get("redirect")
@@ -48,6 +48,8 @@ export class GithubAuthController {
             },
         };
 
-        res.redirect(this.config.get("client.registration")!);
+        session.save(() => {
+            res.redirect(this.config.get("client.registration")!);
+        });
     }
 }
