@@ -25,6 +25,14 @@ export const config = () => {
                 token: env.GITHUB_TOKEN,
                 scope: env.GITHUB_SCOPE,
             },
+            steam: {
+                client: {
+                    id: env.STEAM_CLIENT_ID,
+                },
+                redirectUri: env.STEAM_REDIRECT_URI,
+                credentialsUri: env.STEAM_CREDENTIALS_URI,
+                authorizationUri: env.STEAM_AUTHORIZATION_URI,
+            },
         },
         client: {
             origin: env.CLIENT_ORIGIN,
