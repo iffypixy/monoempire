@@ -18,7 +18,7 @@ interface OAuth2Options<T> {
 export class OAuth2Provider<T> {
     constructor(public readonly options: OAuth2Options<T>) {}
 
-    get authorizationURL() {
+    get authorizationUrl() {
         const params = new URLSearchParams({
             access_type: "offline",
             response_type: "code",
