@@ -4,10 +4,10 @@ import {Nullable} from "@lib/types";
 
 export const redis: {
     client: Nullable<Redis>;
-    setup: () => void;
+    setUp: () => void;
 } = {
     client: null,
-    setup() {
+    setUp() {
         this.client = new Redis({
             host: process.env.REDIS_HOST,
             port: Number(process.env.REDIS_PORT),
