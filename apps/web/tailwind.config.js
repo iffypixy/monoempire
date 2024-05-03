@@ -48,7 +48,8 @@ export default {
                 },
                 accent: {
                     DEFAULT: "rgb(var(--accent-color) / <alpha-value>)",
-                    contrast: "var(--accent-color-contrast)",
+                    contrast:
+                        "rgb(var(--accent-color-contrast) / <alpha-value>)",
                 },
                 success: {
                     DEFAULT: "var(--success-color)",
@@ -57,7 +58,7 @@ export default {
                     DEFAULT: "var(--error-color)",
                 },
                 paper: {
-                    primary: "var(--paper-primary)",
+                    primary: "rgb(var(--paper-primary) / <alpha-value>)",
                     secondary: "var(--paper-secondary)",
                     contrast: "rgb(var(--paper-contrast) / <alpha-value>)",
                 },
@@ -81,7 +82,7 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animate")],
 };
 
 function flatten(theme) {
