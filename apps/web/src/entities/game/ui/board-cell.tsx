@@ -1,4 +1,3 @@
-import {useEffect} from "react";
 import {twMerge} from "tailwind-merge";
 import {cx} from "class-variance-authority";
 
@@ -10,13 +9,7 @@ interface BoardCellProps {
 }
 
 export const BoardCell: React.FC<BoardCellProps> = ({cellIndex}) => {
-    const {boardSize, setBoardSize} = useGameStore();
-
-    useEffect(() => {
-        const board = document.getElementById("board")!;
-
-        setBoardSize(board.offsetWidth);
-    }, []);
+    const {boardSize} = useGameStore();
 
     const cell = map[cellIndex];
 

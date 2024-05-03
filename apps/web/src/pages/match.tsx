@@ -1,7 +1,23 @@
+import {useEffect} from "react";
+
 import {Center, Fullscreen} from "@shared/ui";
-import {map, BoardCell, BoardContent, PlayerTokens} from "@features/game";
+import {
+    map,
+    BoardCell,
+    BoardContent,
+    PlayerTokens,
+    useGameStore,
+} from "@entities/game";
 
 export const MatchPage: React.FC = () => {
+    const {setBoardSize} = useGameStore();
+
+    useEffect(() => {
+        const board = document.getElementById("board")!;
+
+        setBoardSize(board.offsetWidth);
+    }, [setBoardSize]);
+
     return (
         <Fullscreen className="bg-home">
             <Center>
