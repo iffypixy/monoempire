@@ -23,6 +23,10 @@ import Water from "./water.svg?react";
 import Electricity from "./electricity.svg?react";
 import Prize from "./prize.svg?react";
 import Money from "./money.svg?react";
+import Close from "./close.svg?react";
+import Plus from "./plus.svg?react";
+import Search from "./search.svg?react";
+import Lock from "./lock.svg?react";
 
 export const Icons = {
     Flags,
@@ -50,4 +54,8 @@ export const Icons = {
     Electricity,
     Prize,
     Money,
+    Close,
+    Plus,
+    Search,
+    Lock,
 };
