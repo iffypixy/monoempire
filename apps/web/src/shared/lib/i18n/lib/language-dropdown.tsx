@@ -132,7 +132,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                     loop
                     side={side || "top"}
                     align={align || "end"}
-                    className="animate-slide-down-and-fade"
+                    className="animate-slide-down-and-fade z-10"
                 >
                     <DropdownMenu.Arrow className="fill-paper-secondary w-6 h-3" />
 
@@ -160,9 +160,9 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                                         >
                                             <Icon className="w-5 text-primary mr-5" />
 
-                                            <p className="lowercase font-semibold text-base text-paper-contrast">
+                                            <span className="font-bold text-xs uppercase text-paper-contrast">
                                                 {name}
-                                            </p>
+                                            </span>
                                         </div>
                                     </button>
                                 </DropdownMenu.Item>
